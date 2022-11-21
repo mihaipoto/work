@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiApp2.MainPage"
+             xmlns:badge="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.DataGrid;assembly=Syncfusion.Maui.DataGrid"
+             xmlns:local="clr-namespace:MauiApp2"
+
+             x:DataType="local:MainViewModel">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:DisplayBindingConverter x:Key="displayBindingConverter" />
+            <local:SummaryConverter x:Key="summaryConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView>
+
+        <VerticalStackLayout BackgroundColor="Aqua">
+
+            <Button
+                Text="Create Document"
+                FontAttributes="Bold"
+                SemanticProperties.Hint="Creates Word document you click"
+                Command="{Binding CreateDocumentCommand}"
+                HorizontalOptions="Center" />
+
+            <Button
+                Text="Popup"
+                FontAttributes="Bold"
+                SemanticProperties.Hint="Creates Word document you click"
+                Command="{Binding ShowpopupCommand}"
+                HorizontalOptions="Center" />
+
+            <Button
+                Text="Show actions"
+                FontAttributes="Bold"
+                SemanticProperties.Hint="Creates Word document you click"
+                Command="{Binding ShowActionsCommand}"
+                HorizontalOptions="Center" />
+
+            <Button
+                Text="Display prompt"
+                FontAttributes="Bold"
+                SemanticProperties.Hint="Creates Word document you click"
+                Command="{Binding DisplayPromptCommand}"
+                HorizontalOptions="Center" />
+
+            <Button
+                Text="{Binding CevaMesaj}"
+                FontAttributes="Bold"
+                SemanticProperties.Hint="Creates Word document you click"
+                Command="{Binding RequestMessageCommand}"
+                HorizontalOptions="Center" />
+
+            <Label Text="{Binding CevaMesaj}" />
+
+            <!--<badge:SfBadgeView BadgeText="20" HorizontalOptions="Center" VerticalOptions="Center">
+                <badge:SfBadgeView.Content>
+                    <Label Text="CENTER" BackgroundColor="LightGray" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                WidthRequest="100" HeightRequest="60" TextColor="Black" />
+                </badge:SfBadgeView.Content>
+                <badge:SfBadgeView.BadgeSettings>
+                    <badge:BadgeSettings BadgeAlignment="Center" CornerRadius="0" />
+                </badge:SfBadgeView.BadgeSettings>
+            </badge:SfBadgeView>
+            <badge:SfBadgeView  HorizontalOptions="Center" VerticalOptions="Center">
+                <badge:SfBadgeView.Content>
+                    <Image Source="im1.jpg" HeightRequest="70" WidthRequest="60" />
+                </badge:SfBadgeView.Content>
+                <badge:SfBadgeView.BadgeSettings>
+                    <badge:BadgeSettings Type="Warning"  Offset="0, -10" Position="BottomRight" Icon="Away" />
+                </badge:SfBadgeView.BadgeSettings>
+            </badge:SfBadgeView>
+
+            <badge:SfBadgeView HorizontalOptions="Center"  WidthRequest="70" HeightRequest="70" BadgeText="{Binding GetBadgeCount}"
+                               VerticalOptions="Center">
+                <badge:SfBadgeView.Content>
+                    <Image Source="im1.jpg" HeightRequest="70" WidthRequest="70" />
+                </badge:SfBadgeView.Content>
+                <badge:SfBadgeView.BadgeSettings>
+                    <badge:BadgeSettings Type="Error" Animation="Scale" Offset="-12,6" Position="TopRight" />
+                </badge:SfBadgeView.BadgeSettings>
+            </badge:SfBadgeView>
+
+            <Button
+                Text="Add previos badge"
+                FontAttributes="Bold"
+                Grid.Row="0"
+                SemanticProperties.Hint="increment previous badge"
+                Command="{Binding IncrementBadgeCommand}"
+                HorizontalOptions="Center" />-->
+
+            <!--<syncfusion:SfDataGrid
+                x:Name="dataGrid"
+                SortingMode="Multiple"
+                ShowSortNumbers="True"
+                SortingGestureType="DoubleTap"
+                AllowTriStateSorting="True"
+                ItemsSource="{Binding OrderInfoCollection}"
+                AutoGenerateColumnsMode="None">
+                <syncfusion:SfDataGrid. .DefaultStyle>
+                    <syncfusion:DataGridStyle HeaderRowBackground="#0074E3" HeaderRowTextColor="White" RowBackground="#AFD5FB" RowTextColor="#212121" />
+                </syncfusion:SfDataGrid.>
+                <syncfusion:SfDataGrid.Columns>
+                    <syncfusion:DataGridNumericColumn HeaderText="Order ID" MappingName="OrderID" />
+                    <syncfusion:DataGridTextColumn  HeaderText="Customer ID" MappingName="CustomerID" DisplayBinding="{Binding CustomerID,
+                                   Converter={StaticResource displayBindingConverter}}" />
+                    <syncfusion:DataGridTextColumn  HeaderText="Customer" MappingName="Customer" />
+                    <syncfusion:DataGridTextColumn  HeaderText="Ship City" MappingName="ShipCity" />
+                    <syncfusion:DataGridTextColumn  HeaderText="Ship Country" MappingName="ShipCountry" />
+                </syncfusion:SfDataGrid.Columns>
+            </syncfusion:SfDataGrid>-->
+
+
+            <Label Text="{Binding Actual}"/>
+            
+            <CollectionView ItemsSource="{Binding Expected}"
+                            RadioButtonGroup.GroupName="ungrup"
+                            RadioButtonGroup.SelectedValue="{Binding Selection}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10" ColumnDefinitions="auto, auto">
+
+                            <RadioButton GroupName="ungrup" 
+                                         Content="{Binding }"
+                                         Value="{Binding }"
+                                         CheckedChanged="RadioButton_CheckedChanged"
+                                         />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+               
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
