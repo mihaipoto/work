@@ -5,7 +5,7 @@ using Aplicatie.Pages;
 using Aplicatie.ViewModels;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
-
+using Aplicatie.Core;
 
 namespace Aplicatie;
 
@@ -34,7 +34,8 @@ public static class MauiProgram
 
 		builder.Services.AddSingleton<FolderPicker>();
 		builder.Services.AddSingleton<DialogService>();
-		builder.Services.AddMyLibraryService();
+		builder.Services.AddInfrastructureService();
+		builder.Services.AddCoreServices();
 
 		return builder.Build();
 	}

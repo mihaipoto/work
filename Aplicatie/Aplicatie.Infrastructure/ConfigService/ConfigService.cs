@@ -1,17 +1,26 @@
-﻿using Aplicatie.Core.Modele;
+﻿using Aplicatie.Core.Contracts;
+using Aplicatie.Core.Modele;
 using Microsoft.Extensions.Configuration;
 
 namespace Aplicatie.Infrastructure.Services;
 
 /*
-       The main Math class
-       Contains all methods for performing basic math functions
+       Clasa 
  */
 
 /// <include file='documentatieCodInfrastructure.xml' path='docs/members[@name="math"]/Math/*'/>
-public class ConfigService
+public class ConfigService : IConfigService
 {
     private SettingsConfig _settingsConfig = new();
+
+    public SettingsConfig SettingsConfig { get { return _settingsConfig; } }
+
+    private IConfiguration _loggingConfig;
+
+    public IConfiguration LoggingConfig
+    {
+        get { return _loggingConfig; }
+    }
 
     public ConfigService()
     {
@@ -30,6 +39,11 @@ public class ConfigService
             {
                 //config.ErrorOnUnknownConfiguration = true;
             });
+
+            _loggingConfig = new ConfigurationBuilder()
+                .AddJsonFile("LoggerServiceConfig.json", optional: false, reloadOnChange: true)
+                .Build();
+
         }
         catch (Exception ex)
         {

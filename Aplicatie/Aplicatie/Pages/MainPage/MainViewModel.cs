@@ -1,8 +1,11 @@
-﻿using Aplicatie.Infrastructure.Services;
+﻿using Aplicatie.Core;
+using Aplicatie.Infrastructure.Services;
+using Aplicatie.Platforms.Windows;
 using Aplicatie.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Serilog;
 using System.Text;
 
 
@@ -12,52 +15,32 @@ public partial class MainViewModel : ObservableObject
 {
 
     private DialogService _dialogService;
-    private ConfigService _cf;
+    private readonly FolderPicker _folderPicker;
 
-
-    
-
-    public MainViewModel()
+    public MainViewModel(
+        DialogService dialogService,
+        FolderPicker folderPicker)
     {
-        InitMainViewModel();
+        _dialogService= dialogService;
+        _folderPicker = folderPicker;
     }
 
-    async void InitMainViewModel()
-    {
-        _dialogService = new DialogService();
 
-        try
-        {
-            
-            _cf = new ConfigService();
-        }
-        catch (Exception ex)
-        {
-            await _dialogService.ShowAlertAsync2("EXCEPTIE", $"EROARE: Mesaj: {ex.Message}, Sursa: {ex.Source}", "OK" , "N-amce face!");
-           
-        }
-
-        
-    }
 
  
     [RelayCommand]
-    public async void Showpopup()
+    public async Task Showpopup()
     {
         await _dialogService.ShowAlertAsync2("Alert", "You have been alerted", "OK", "Cancel");
     }
 
     [RelayCommand]
-    public async void ShowActions()
+    public async Task PickFolder()
     {
-        await _dialogService.ShowActionsAsync("Alert", "You have been alerted", "OK", "Cancel");
+        await _folderPicker.PickFolder();
     }
 
-    [RelayCommand]
-    public async void DisplayPrompt()
-    {
-        await _dialogService.ShowPrompt("Alert", "You have been alerted");
-    }
+
 
    
 

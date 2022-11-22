@@ -1,0 +1,14 @@
+{
+  "Serilog": {
+    "Using": [ "Serilog.Sinks.Debug", "Serilog.Sinks.File" ],
+    "MinimumLevel": "Information",
+    "WriteTo": [
+      { "Name": "Debug" },
+      {
+        "Name": "File",
+        "Args": { "path": "D:\\Work\\Logs\\log.txt" }
+      }
+    ]
+ 
+  }
+}
