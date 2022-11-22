@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace MauiApp2
+namespace Aplicatie.Converters
 {
     public class DisplayBindingConverter : IValueConverter
     {

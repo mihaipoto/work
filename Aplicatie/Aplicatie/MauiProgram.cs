@@ -1,8 +1,8 @@
 ﻿using Aplicatie.Infrastructure;
 using Aplicatie.Platforms.Windows;
 using Aplicatie.Services;
+using Aplicatie.Pages;
 using Aplicatie.ViewModels;
-using Aplicatie.Views;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 

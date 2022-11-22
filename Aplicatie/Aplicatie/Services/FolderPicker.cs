@@ -3,7 +3,7 @@ using WindowsFolderPicker = Windows.Storage.Pickers.FolderPicker;
 
 namespace Aplicatie.Platforms.Windows;
 
-public class FolderPicker : IFolderPicker
+public class FolderPicker 
 {
     public async Task<string> PickFolder()
     {

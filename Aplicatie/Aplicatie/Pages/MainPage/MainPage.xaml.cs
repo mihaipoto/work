@@ -1,6 +1,8 @@
-﻿using Aplicatie.ViewModels;
+﻿
 
-namespace Aplicatie.Views;
+using Aplicatie.ViewModels;
+
+namespace Aplicatie.Pages;
 
 
 public partial class MainPage : ContentPage
