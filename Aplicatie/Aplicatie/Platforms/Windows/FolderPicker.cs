@@ -18,6 +18,8 @@ public class FolderPicker
 
         var result = await folderPicker.PickSingleFolderAsync();
 
+        if (string.IsNullOrEmpty(result?.Path)) 
+            return string.Empty;
         return result.Path;
     }
 }

@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.Messaging;
 
 namespace Aplicatie.Infrastructure.FileService;
 
-public class FileService : IRecipient<CerereListeazaFisiereleDinDirector>, IFileService
+public class FileService : IRecipient<CerereListeazaFisiereleDinDirector>
 {
     public void Receive(CerereListeazaFisiereleDinDirector message)
     {

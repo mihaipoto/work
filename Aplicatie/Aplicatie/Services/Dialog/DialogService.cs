@@ -4,7 +4,7 @@ using CommunityToolkit.Maui.Views;
 
 namespace Aplicatie.Services;
 
-public class DialogService
+public class DialogService : IDialogService
 {
     public Task<bool> ShowConfirmationAsync(string title, string message)
     {

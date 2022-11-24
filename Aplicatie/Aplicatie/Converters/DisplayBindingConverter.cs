@@ -2,13 +2,13 @@
 
 namespace Aplicatie.Converters
 {
-    public class DisplayBindingConverter : IValueConverter
+    public class DirectorSelectatBindingConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value != null)
-                return "Customer : " + value.ToString();
-            return null;
+            if (value is null || value.ToString().Equals(string.Empty))
+                return  "Nu a fost selectat niciun director";
+            return value.ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -16,6 +16,29 @@ namespace Aplicatie.Converters
             if (value != null)
                 return value.ToString();
             return null;
+        }
+    }
+
+
+    public class WhiteOrDarKThemeBindingConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if(value is not null)
+            {
+                switch (value) 
+                {
+                    case AppTheme.Dark: { return "Dark Theme"; }
+                    case AppTheme.Light: { return "Light Theme"; }
+                    default: { return "System Theme"; }
+                }
+            }
+            return string.Empty; 
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 
