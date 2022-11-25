@@ -8,14 +8,16 @@
 
   <ItemGroup>
     <None Remove="Config.json" />
+    <None Remove="ConfigFiles\AppConfig.json" />
+    <None Remove="ConfigFiles\LoggerServiceConfig.json" />
     <None Remove="LoggerServiceConfig.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Config.json">
+    <Content Include="ConfigFiles\AppConfig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="LoggerServiceConfig.json">
+    <Content Include="ConfigFiles\LoggerServiceConfig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

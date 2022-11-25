@@ -1,53 +1,90 @@
-﻿using Aplicatie.Core.Contracts;
-using Aplicatie.Core.Modele;
+﻿using Aplicatie.Core.Modele;
 using Microsoft.Extensions.Configuration;
+using Microsoft.VisualBasic.FileIO;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Unicode;
 
 namespace Aplicatie.Infrastructure.Services;
 
-/*
-       Clasa 
- */
 
-/// <include file='documentatieCodInfrastructure.xml' path='docs/members[@name="math"]/Math/*'/>
-public class ConfigService : IConfigService
+public class ConfigService : IConfigService, IDisposable
 {
-    private SettingsConfig _settingsConfig = new();
+    private StringBuilder _pathConfig = new StringBuilder();
 
-    public SettingsConfig SettingsConfig { get { return _settingsConfig; } }
+    private static readonly JsonSerializerOptions _options = new()
+    {
+        WriteIndented = true,
+        Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin)
+    };
+
+    private AppConfig _appConfig =new();
+
+    public AppConfig AppConfig => _appConfig;
 
     private IConfiguration _loggingConfig;
 
-    public IConfiguration LoggingConfig
-    {
-        get { return _loggingConfig; }
-    }
+    public IConfiguration LoggingConfig => _loggingConfig;
+
+
+
 
     public ConfigService()
     {
+        
         CitesteConfiguratie();
+        
+
     }
 
-    private void CitesteConfiguratie()
+    private  void CitesteConfiguratie()
     {
         try
         {
+            _pathConfig.Append("""D:\work\Aplicatie\stuff\ConfigFiles\AppConfig.json""");
             IConfigurationRoot config = new ConfigurationBuilder()
-                .AddJsonFile("Config.json", optional: false, reloadOnChange: true)
+                .AddJsonFile(_pathConfig.ToString(), optional: false, reloadOnChange: true)
                 .Build();
+            _pathConfig.Clear();
 
-            config.GetSection(nameof(SettingsConfig)).Bind(_settingsConfig, config =>
+            config.GetSection(nameof(AppConfig)).Bind(_appConfig, config =>
             {
                 //config.ErrorOnUnknownConfiguration = true;
             });
 
+            _pathConfig.Append("""D:\work\Aplicatie\stuff\ConfigFiles\LoggerServiceConfig.json""");
             _loggingConfig = new ConfigurationBuilder()
-                .AddJsonFile("LoggerServiceConfig.json", optional: false, reloadOnChange: true)
+                .AddJsonFile(_pathConfig.ToString(), optional: false, reloadOnChange: true)
                 .Build();
-
+            _pathConfig.Clear();
         }
         catch (Exception ex)
         {
             throw;
         }
+    }
+
+    public void SalveazaConfiguratie(IConfiguratieObiect configuratieObiect)
+    {
+        switch(configuratieObiect) 
+        {
+            case Core.Modele.AppConfig:
+                var json = JsonSerializer.Serialize(
+                    new Dictionary<string, AppConfig>() { { nameof(Core.Modele.AppConfig), (AppConfig)configuratieObiect } }, _options);
+                File.WriteAllText("""D:\work\Aplicatie\stuff\ConfigFiles\AppConfig.json""", json);
+                break;
+            
+            default:
+                throw new ArgumentOutOfRangeException(nameof(configuratieObiect));
+        };
+    }
+
+    public void Dispose()
+    {
+        _pathConfig.Clear();
+        _pathConfig = null;
+        System.GC.Collect();
+        
     }
 }

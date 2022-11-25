@@ -48,14 +48,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Views\**" />
-	  <EmbeddedResource Remove="Views\**" />
-	  <MauiCss Remove="Views\**" />
-	  <MauiXaml Remove="Views\**" />
-	  <None Remove="Views\**" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="3.0.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0-preview1" />
 		<PackageReference Include="FluentValidation" Version="11.4.0" />
@@ -68,19 +60,32 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Pages\PopUpView\PopUpPage.xaml.cs">
+	  <Compile Update="Views\ManualPage.xaml.cs">
+	    <DependentUpon>ManualPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\AutomatPage.xaml.cs">
+	    <DependentUpon>AutomatPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\PopUpView\PopUpPage.xaml.cs">
 	    <DependentUpon>PopUpPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PRIResource Remove="Views\**" />
+	  <MauiXaml Update="Controls\NewContent1.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ConfigurarePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ManualPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Pages\TestPage\TestPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
+	  <Folder Include="Pages\" />
+	  <Folder Include="ViewModels\Base\" />
 	</ItemGroup>
 
 </Project>

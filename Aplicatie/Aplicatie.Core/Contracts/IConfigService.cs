@@ -7,5 +7,5 @@ public interface IConfigService
 {
     IConfiguration LoggingConfig { get; }
 
-    SettingsConfig SettingsConfig { get; }
+    AppConfig AppConfig { get; }
 }

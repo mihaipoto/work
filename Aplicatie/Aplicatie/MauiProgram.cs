@@ -47,12 +47,16 @@ public static class MauiProgram
 	{
         builder.Logging.AddDebug();
 
-        builder.Services.AddSingleton<MainPage>();
-        builder.Services.AddSingleton<MainViewModel>();
+        builder.Services.AddSingleton<AutomatPage>();
+        builder.Services.AddSingleton<AutomatViewModel>();
+        builder.Services.AddSingleton<ManualPage>();
+        builder.Services.AddSingleton<ManualViewModel>();
+        builder.Services.AddTransient<ConfigurarePage>();
+        builder.Services.AddTransient<ConfigurareViewModel>();
 
         builder.Services.AddSingleton<FolderPicker>();
         builder.Services.AddSingleton<IDialogService, DialogService>();
-		builder.Services.AddSingleton<INavigationService, MauiNavigationService>();
+		builder.Services.AddSingleton<INavigationService, NavigationService>();
 
         //mauiAppBuilder.Services.AddSingleton<IAppEnvironmentService, AppEnvironmentService>(
         //   serviceProvider =>
@@ -74,9 +78,9 @@ public static class MauiProgram
         //   });
 
 
-        builder.Services.AddTransient<TestPage>();
-        builder.Services.AddTransient<TestPageViewModel>();
-        builder.Services.AddScoped<IValidator<TestPageViewModel>, TestPageValidation>();
+        //builder.Services.AddTransient<TestPage>();
+        //builder.Services.AddTransient<TestPageViewModel>();
+        //builder.Services.AddScoped<IValidator<TestPageViewModel>, TestPageValidation>();
 
         return builder;
 	}

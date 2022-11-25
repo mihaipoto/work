@@ -5,9 +5,14 @@ VisualStudioVersion = 17.0.31611.283
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aplicatie", "Aplicatie\Aplicatie.csproj", "{7B0DC287-12C9-453E-94C5-435039EC282E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aplicatie.Core", "Aplicatie.Core\Aplicatie.Core.csproj", "{84AB3D14-D309-4582-B3EE-D1EF1A28C151}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aplicatie.Core", "Aplicatie.Core\Aplicatie.Core.csproj", "{84AB3D14-D309-4582-B3EE-D1EF1A28C151}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aplicatie.Infrastructure", "Aplicatie.Infrastructure\Aplicatie.Infrastructure.csproj", "{3EA34BE1-9F39-47BA-A914-BD7066F71D89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aplicatie.Infrastructure", "Aplicatie.Infrastructure\Aplicatie.Infrastructure.csproj", "{3EA34BE1-9F39-47BA-A914-BD7066F71D89}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConfigFiles", "ConfigFiles", "{FC5F9D13-6FA8-47BB-A806-84EA06237A9E}"
+	ProjectSection(SolutionItems) = preProject
+		stuff\ConfigFiles\AppConfig.json = stuff\ConfigFiles\AppConfig.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

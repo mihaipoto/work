@@ -1,20 +1,19 @@
 ﻿using Aplicatie.Core.Modele;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Aplicatie.Core.Mesaje;
 
-public abstract class BaseResponse
-{
-    public bool Rezultat { get; set; } = true;
-    public List<Exception> ListaExceptii { get; set; } = new();
+//public abstract record BaseResponse(bool Rezultat, List<Exception> ListaExceptii);
 
+public class RaspunsListeazaFisiereleDinDirector
+{
+    public bool Rezultat { get; set; }
+    public List<Exception> ListaExceptii { get; set; } = new List<Exception>();
+    public List<FileModel> ListaFisiere { get; set; } = new List<FileModel>();
 }
 
-public class RaspunsListeazaFisiereleDinDirector : BaseResponse
+public record RaspunsModDeLucruActualDinConfiguratie(string ModDeLucruActual);
+
+public class RaspunsAppConfigDinConfiguratie
 {
-    public List<FileModel> ListaFisiere { get; set; } = new();
+    public AppConfig AppConfig { get; set; }
 }
