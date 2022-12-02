@@ -10,6 +10,8 @@ using Microsoft.Maui.Hosting;
 using System.ComponentModel.DataAnnotations;
 
 using FluentValidation;
+using Microsoft.Maui.Controls;
+using Microsoft.Extensions.Configuration;
 
 namespace Aplicatie;
 
@@ -29,14 +31,15 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			})
-			.AddUIServices();
+        .AddUIServices();
 
 
-		
 
-		
 
-		builder.Services.AddInfrastructureService();
+
+        
+       
+        builder.Services.AddInfrastructureService(builder.Configuration);
 		builder.Services.AddCoreServices();
 		
 
@@ -57,6 +60,9 @@ public static class MauiProgram
         builder.Services.AddSingleton<FolderPicker>();
         builder.Services.AddSingleton<IDialogService, DialogService>();
 		builder.Services.AddSingleton<INavigationService, NavigationService>();
+
+
+        
 
         //mauiAppBuilder.Services.AddSingleton<IAppEnvironmentService, AppEnvironmentService>(
         //   serviceProvider =>
@@ -84,4 +90,6 @@ public static class MauiProgram
 
         return builder;
 	}
+
+    
 }

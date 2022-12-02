@@ -18,8 +18,8 @@ public class ConfigService : IConfigService, IDisposable
         WriteIndented = true,
         Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin)
     };
-
-    private AppConfig _appConfig =new();
+    private readonly IDateTimeProvider _dateTimeProvider;
+    private AppConfig _appConfig; 
 
     public AppConfig AppConfig => _appConfig;
 
@@ -30,12 +30,12 @@ public class ConfigService : IConfigService, IDisposable
 
 
 
-    public ConfigService()
+    public ConfigService(IDateTimeProvider dateTimeProvider)
     {
         
         CitesteConfiguratie();
-        
-
+        _dateTimeProvider = dateTimeProvider;
+        _appConfig = new();
     }
 
     private  void CitesteConfiguratie()

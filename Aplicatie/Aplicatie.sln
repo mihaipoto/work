@@ -12,6 +12,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConfigFiles", "ConfigFiles", "{FC5F9D13-6FA8-47BB-A806-84EA06237A9E}"
 	ProjectSection(SolutionItems) = preProject
 		stuff\ConfigFiles\AppConfig.json = stuff\ConfigFiles\AppConfig.json
+		stuff\ConfigFiles\LoggerServiceConfig.json = stuff\ConfigFiles\LoggerServiceConfig.json
 	EndProjectSection
 EndProject
 Global

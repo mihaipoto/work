@@ -3,6 +3,7 @@ using Aplicatie.Core.Contracts;
 using Aplicatie.Core.Mesaje;
 using Aplicatie.Core.Modele;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.Options;
 
 namespace Aplicatie.Core;
 
@@ -11,49 +12,55 @@ public class FlowControl:
     IRecipient<CerereAppConfigDinConfiguratie>
 {
     private readonly IDateTimeProvider _timeProvider;
-    private readonly IConfigService _configService;
+    //private readonly IConfigService _configService;
     private readonly ILoggerService _loggerService;
+    private readonly IOptionsMonitor<AppConfig> _optionsMonitor;
 
     public FlowControl(
         IDateTimeProvider timeProvider,
-        IConfigService configService,
-        ILoggerService loggerService
+        //IConfigService configService,
+        ILoggerService loggerService,
+        IOptionsMonitor<AppConfig> optionsMonitor
         )
     {
-        ArgumentNullException.ThrowIfNullOrEmpty( nameof( timeProvider ) );
-        ArgumentNullException.ThrowIfNullOrEmpty( nameof( configService ) );
-        ArgumentNullException.ThrowIfNullOrEmpty( nameof( loggerService ) );
+        
         _timeProvider = timeProvider;
-        _configService = configService;
         _loggerService = loggerService;
-        InitServices();
+        _optionsMonitor = optionsMonitor;
+        //InitServices();
         WeakReferenceMessenger.Default.RegisterAll(this);
         
     }
 
+
+
+
     public void Receive(CerereModDeLucruActualDinConfiguratie message)
     {
-        message.Reply(_configService.AppConfig.ModDeLucru);
+        message.Reply(_optionsMonitor.CurrentValue.ModDeLucru);
     }
 
     public void Receive(CerereAppConfigDinConfiguratie message)
     {
-        message.Reply(_configService.AppConfig);
-        _loggerService.Logheaza_INFO("A fost cerut obiectul {AppConfig} cu valoarea {ValoareAppConfig}", nameof(AppConfig), _configService.AppConfig.ToString());
-    }
-
-    private void InitServices()
-    {
-        try
-        {
-            _loggerService.InitLoggerService(_configService.LoggingConfig);
-        }
-        catch (Exception)
-        {
-
-            throw;
-        }
+        //_optionsMonitor.CurrentValue.ModDeLucru = "lalala";
+        //ObiectConfiguratieExtension.SaveConfiguration(_optionsMonitor.CurrentValue);
+        message.Reply(_optionsMonitor.CurrentValue);
         
+        _loggerService.Logheaza_INFO("A fost cerut obiectul {AppConfig} cu valoarea {@ValoareAppConfig}", nameof(AppConfig), _optionsMonitor.CurrentValue);
     }
+
+    //private void InitServices()
+    //{
+    //    try
+    //    {
+    //        _loggerService.InitLoggerService(_configService.LoggingConfig);
+    //    }
+    //    catch (Exception)
+    //    {
+
+    //        throw;
+    //    }
+        
+    //}
 }
 
