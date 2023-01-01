@@ -13,7 +13,7 @@ public partial class AppShell : Shell
     public AppShell(INavigationService navigationService)
 	{
         _navigationService = navigationService;
-        AppShell.InitializeRouting();
+        //AppShell.InitializeRouting();
         InitializeComponent();
        
     }
@@ -31,12 +31,12 @@ public partial class AppShell : Shell
         }
     }
 
-    private static void InitializeRouting()
-    {
-        Routing.RegisterRoute("Config", typeof(ConfigurarePage));
+    //private static void InitializeRouting()
+    //{
+    //    Routing.RegisterRoute("Config", typeof(ConfigurarePage));
         
        
-    }
+    //}
 
 
 

@@ -7,14 +7,17 @@ namespace Aplicatie.ViewModels;
 
 
 
-[INotifyPropertyChanged]
-public partial class ManualViewModel
+
+public partial class ManualViewModel : ObservableValidator
 {
+    
     private readonly IDialogService _dialogService;
     private readonly INavigationService _navigationService;
     private readonly FolderPicker _folderPicker;
-
     private string _pickedFolder;
+
+    [ObservableProperty]
+    bool isBusy = false;
 
 
     public string PickedFolder
@@ -36,13 +39,10 @@ public partial class ManualViewModel
     [RelayCommand]
     public async Task PickFolder()
     {
-        //await IsBusyFor(async () =>
-        //{
-        //    PickedFolder = await _folderPicker.PickFolder();
-        //    await Task.Delay(5000);
-        //});
+        IsBusy= true;
         PickedFolder = await _folderPicker.PickFolder();
         await Task.Delay(5000);
+        IsBusy= false;
 
     }
 

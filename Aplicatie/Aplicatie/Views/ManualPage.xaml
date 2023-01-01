@@ -3,69 +3,57 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Aplicatie.Pages.ManualPage"
              xmlns:vm="clr-namespace:Aplicatie.ViewModels"
-             xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:converters="clr-namespace:Aplicatie.Converters"
-             x:DataType="vm:ManualViewModel"
-             Shell.FlyoutBehavior="Disabled"
-             Shell.NavBarIsVisible="False"
-             Shell.TabBarIsVisible="False">
-
-    <ContentPage.Resources>
-        <converters:DirectorSelectatBindingConverter x:Key="DirectorSelectatBindingConverter" />
-        <converters:WhiteOrDarKThemeBindingConverter x:Key="WhiteOrDarKThemeBindingConverter" />
-        <converters:NegateBoolean x:Key="NegateBoolean" />
-    </ContentPage.Resources>
+             x:DataType="vm:ManualViewModel">
 
 
-    <ScrollView>
-        <Grid ColumnDefinitions="*, *">
-            <ActivityIndicator Grid.Row="0"
-                               Grid.Column="0"
-                               Grid.RowSpan="2"
-                               Grid.ColumnSpan="2"
-                               IsVisible="{Binding PickFolderCommand.IsRunning}"
-                               IsRunning="{Binding PickFolderCommand.IsRunning}">
-                
-            </ActivityIndicator>
-            <VerticalStackLayout IsEnabled="{Binding PickFolderCommand.IsRunning, Converter={StaticResource NegateBoolean}}"
-                                 IsVisible="{Binding PickFolderCommand.IsRunning, Converter={StaticResource NegateBoolean}}"
-                Grid.ColumnSpan="2"
-                VerticalOptions="Start">
-                <Border Margin="0,10"
-                        HorizontalOptions="Start">
-
-                    <HorizontalStackLayout HorizontalOptions="Start"
-                                           Padding="20">
-                        <Label Text="Manual Selecteaza directorul de lucru"
-                               FontSize="18"
-                               VerticalOptions="Center" />
-                        <Button Text="Browse"
-                                Command="{Binding PickFolderCommand}"
-                                VerticalOptions="Center" />
-                    </HorizontalStackLayout>
-                </Border>
-                <Border Margin="0,10"
-                        HorizontalOptions="Start">
 
 
-                    <Label Padding="10"
-                           Text="{Binding PickedFolder, Converter={StaticResource DirectorSelectatBindingConverter}}"
+    <Grid RowDefinitions="auto, *">
+        <ActivityIndicator Grid.RowSpan="2"
+                           IsVisible="{Binding IsBusy}"
+                           IsRunning="{Binding IsBusy}">
+
+        </ActivityIndicator>
+        <VerticalStackLayout IsVisible="{Binding PickFolderCommand.IsRunning, Converter={toolkit:InvertedBoolConverter}}"
+                             Grid.ColumnSpan="2"
+                             VerticalOptions="Start">
+            <Border Margin="0,10"
+                    HorizontalOptions="Start">
+
+                <HorizontalStackLayout HorizontalOptions="Start"
+                                       Padding="20">
+                    <Label Text="Manual Selecteaza directorul de lucru"
                            FontSize="18"
                            VerticalOptions="Center" />
-                </Border>
+                    <Button Text="Browse"
+                            Command="{Binding PickFolderCommand}"
+                            VerticalOptions="Center" />
+                </HorizontalStackLayout>
+            </Border>
+            <Border Margin="0,10"
+                    HorizontalOptions="Start">
+
+
+                <Label Text="{Binding PickedFolder, Converter={StaticResource DirectorSelectatBindingConverter}}"
+                       FontSize="18"
+                       Padding="10"
+                       VerticalOptions="Center" />
+            </Border>
 
 
 
-            </VerticalStackLayout>
-            <HorizontalStackLayout Grid.Column="1"
-                                   Margin="10">
-                
-                <Button Text="Settings"
-                        Command="{Binding GoToConfigCommand}"
-                        HorizontalOptions="EndAndExpand"
-                        VerticalOptions="EndAndExpand" />
-            </HorizontalStackLayout>
+        </VerticalStackLayout>
+        <HorizontalStackLayout Grid.Row="1"
+                               Margin="10"
+                               HorizontalOptions="EndAndExpand"
+                               VerticalOptions="EndAndExpand">
 
-        </Grid>
-    </ScrollView>
+            <Button Text="Settings"
+                    Command="{Binding GoToConfigCommand}" />
+        </HorizontalStackLayout>
+
+    </Grid>
+
 </ContentPage>

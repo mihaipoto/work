@@ -19,11 +19,11 @@ public partial class App : Application
         window.X = 1;
         window.Y = 1;
 
-        window.MaximumWidth = 1000;
-        window.MaximumHeight = 800;
+        //window.MaximumWidth = 1000;
+        //window.MaximumHeight = 800;
 
-        window.MinimumWidth = 1000;
-        window.MinimumHeight = 800;
+        //window.MinimumWidth = 1000;
+        //window.MinimumHeight = 800;
 
         window.Width = 1000;
         window.Height = 800;

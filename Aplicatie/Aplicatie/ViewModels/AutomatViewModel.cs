@@ -5,45 +5,28 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Aplicatie.ViewModels;
 
-public partial class AutomatViewModel : ObservableObject
+public partial class AutomatViewModel : ObservableValidator
 {
     private readonly IDialogService _dialogService;
     private readonly INavigationService _navigationService;
 
-    public AppTheme CurrentTheme => Application.Current.UserAppTheme;
+    
 
     public AutomatViewModel(
         IDialogService dialogService,
-        INavigationService navigationService,
-        FolderPicker folderPicker)
+        INavigationService navigationService)
 
     {
         _dialogService = dialogService;
         _navigationService = navigationService;
     }
 
+    [ObservableProperty]
+    bool isBusy = false;
+
     [RelayCommand]
-    public void ToggleDarkLight()
+    public async Task GoToConfig()
     {
-        switch (Application.Current.UserAppTheme)
-        {
-            case AppTheme.Dark:
-                Application.Current.UserAppTheme = AppTheme.Light;
-                OnPropertyChanged(nameof(CurrentTheme));
-                break;
-
-            case AppTheme.Light:
-                Application.Current.UserAppTheme = AppTheme.Unspecified;
-                OnPropertyChanged(nameof(CurrentTheme));
-                break;
-
-            case AppTheme.Unspecified:
-                Application.Current.UserAppTheme = AppTheme.Dark;
-                OnPropertyChanged(nameof(CurrentTheme));
-                break;
-
-            default:
-                break;
-        }
+        await _navigationService.NavigateToAsync("Config");
     }
 }

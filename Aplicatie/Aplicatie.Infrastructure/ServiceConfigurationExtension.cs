@@ -12,7 +12,7 @@ public static class ServiceConfigurationExtension
     public static IServiceCollection AddInfrastructureService(
       this IServiceCollection services, ConfigurationManager configuration)
     {
-        services.AddSingleton<IConfigService, ConfigService>();
+        
         services.AddSingleton<ILoggerService, LoggerService>();
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 

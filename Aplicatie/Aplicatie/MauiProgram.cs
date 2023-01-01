@@ -6,12 +6,14 @@ using Aplicatie.ViewModels;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using Aplicatie.Core;
+using Microsoft.Maui.LifecycleEvents;
 using Microsoft.Maui.Hosting;
 using System.ComponentModel.DataAnnotations;
 
 using FluentValidation;
 using Microsoft.Maui.Controls;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Maui.Controls.Xaml;
 
 namespace Aplicatie;
 
@@ -20,25 +22,25 @@ public static class MauiProgram
 	public static MauiApp CreateMauiApp()
 	{
 		var builder = MauiApp.CreateBuilder();
-		builder
-			.UseMauiApp<App>()
-			.UseMauiCommunityToolkit(options =>
-			{
+        builder
+            .UseMauiApp<App>()
+            .UseMauiCommunityToolkit(options =>
+            {
 
-			})
-			.ConfigureFonts(fonts =>
-			{
-				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-			})
+            })
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            })
         .AddUIServices();
-
-
-
-
-
-        
        
+
+
+
+
+
+
         builder.Services.AddInfrastructureService(builder.Configuration);
 		builder.Services.AddCoreServices();
 		
@@ -46,22 +48,24 @@ public static class MauiProgram
 		return builder.Build();
 	}
 
-	public static MauiAppBuilder AddUIServices(this MauiAppBuilder builder)
+    private static void MakeWindowZ(Microsoft.UI.Xaml.Window window)
+    {
+        
+    }
+
+    public static MauiAppBuilder AddUIServices(this MauiAppBuilder builder)
 	{
         builder.Logging.AddDebug();
 
-        builder.Services.AddSingleton<AutomatPage>();
-        builder.Services.AddSingleton<AutomatViewModel>();
-        builder.Services.AddSingleton<ManualPage>();
-        builder.Services.AddSingleton<ManualViewModel>();
-        builder.Services.AddTransient<ConfigurarePage>();
-        builder.Services.AddTransient<ConfigurareViewModel>();
+        
+        builder.Services.AddTransient<GuidService>();
 
         builder.Services.AddSingleton<FolderPicker>();
         builder.Services.AddSingleton<IDialogService, DialogService>();
 		builder.Services.AddSingleton<INavigationService, NavigationService>();
-
-
+        builder.Services.AddSingletonWithShellRoute<AutomatPage, AutomatViewModel>("AutomatPage");
+        builder.Services.AddSingletonWithShellRoute<ManualPage, ManualViewModel>("ManualPage");
+        builder.Services.AddTransientWithShellRoute<ConfigurarePage, ConfigurareViewModel>("Config");
         
 
         //mauiAppBuilder.Services.AddSingleton<IAppEnvironmentService, AppEnvironmentService>(

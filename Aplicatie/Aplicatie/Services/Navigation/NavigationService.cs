@@ -1,17 +1,24 @@
 ﻿
 
 using Aplicatie.Core.Mesaje;
+using Aplicatie.Core.Modele;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.Options;
 
 namespace Aplicatie.Services;
 
 public class NavigationService : INavigationService
 {
-    //private readonly ISettingsService _settingsService;
+    private AppConfig _appConfig;
 
-    public NavigationService()
+    public NavigationService(IOptionsMonitor<AppConfig> appConfigOptions)
     {
-        
+        _appConfig = new AppConfig(appConfigOptions.CurrentValue);
+
+        appConfigOptions.OnChange(optiuniNoi =>
+        {
+            _appConfig = new AppConfig(optiuniNoi);
+        });
     }
 
     //public Task InitializeAsync() =>
@@ -22,19 +29,28 @@ public class NavigationService : INavigationService
 
     public async Task InitializeAsync()
     {
-        string ModDeLucruActual = await WeakReferenceMessenger.Default.Send<CerereModDeLucruActualDinConfiguratie>();
-        switch(ModDeLucruActual)
+        try
         {
-            case "Automat":
-                await NavigateToAsync("//AutomatPage");
-                break;
-            case "Manual":
-                await NavigateToAsync("//ManualPage");
-                break;
-            default:
-                await NavigateToAsync("//ManualPage");
-                break;
+            
+            switch (_appConfig.ModDeLucru)
+            {
+                case "Automat":
+                    await NavigateToAsync("//AutomatPage");
+                    break;
+                case "Manual":
+                    await NavigateToAsync("//ManualPage");
+                    break;
+                default:
+                    await NavigateToAsync("//ManualPage");
+                    break;
+            }
         }
+        catch (Exception)
+        {
+
+            throw;
+        }
+        
            
     }   
 

@@ -8,19 +8,28 @@ namespace Aplicatie.Core.Modele;
 
 public sealed class AppConfig : IConfiguratieObiect
 {
-    //public AppConfig(IDateTimeProvider dateTimeProvider)
-    //{
-    //    _dateTimeProvider = dateTimeProvider;
-    //}
-    public string ModDeLucru { get; set; }
-
-    public IEnumerable<string> ModuriDeLucruPosibile { get; set; }
-    public DateTime LastModified { get ; set ; }
-    public string FilePath { get ; set ; }
-
    
+    public string ModDeLucru { get; set; } = string.Empty;
+
+    public List<string> ModuriDeLucruPosibile { get; set; } = new List<string>();
+    public DateTime LastModified { get ; set ; } = new DateTime();
+    public string FilePath { get ; set ; } = string.Empty;  
+
+
     //private readonly IDateTimeProvider _dateTimeProvider;
 
+    public AppConfig()
+    {
+
+    }
+    public AppConfig(AppConfig appConfig)
+    {
+        ModDeLucru= appConfig.ModDeLucru;
+        ModuriDeLucruPosibile.Clear();
+        ModuriDeLucruPosibile.AddRange(appConfig.ModuriDeLucruPosibile);
+        LastModified = appConfig.LastModified;
+        FilePath= appConfig.FilePath;
+    }
    
 }
 
