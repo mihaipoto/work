@@ -36,13 +36,15 @@
                     HorizontalOptions="Start">
 
 
-                <Label Text="{Binding PickedFolder, Converter={StaticResource DirectorSelectatBindingConverter}}"
+                <Label Text="{Binding PickedFolder}"
                        FontSize="18"
                        Padding="10"
                        VerticalOptions="Center" />
             </Border>
 
 
+            <Button Text="Add"
+                    Command="{Binding GoToAddCommand}" />
 
         </VerticalStackLayout>
         <HorizontalStackLayout Grid.Row="1"

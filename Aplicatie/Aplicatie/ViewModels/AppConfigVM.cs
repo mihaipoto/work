@@ -13,30 +13,31 @@ namespace Aplicatie.ViewModels;
 public partial class AppConfigVM : ObservableObject
 {
     [ObservableProperty]
-    string modDeLucru = string.Empty;
-
-    List<string> ModuriDeLucruPosibile = new();
+    string modDeLucru;
 
     [ObservableProperty]
-    DateTime lastModified = new DateTime();
+    List<string> moduriDeLucruPosibile;
 
     [ObservableProperty]
-    string filePath = string.Empty;
+    DateTime lastModified;
+
+    [ObservableProperty]
+    string filePath;
 
 
     public AppConfigVM(AppConfig appConfig)
     {
         ModDeLucru = appConfig.ModDeLucru;
-        ModuriDeLucruPosibile.Clear();
+        ModuriDeLucruPosibile = new();
         ModuriDeLucruPosibile.AddRange(appConfig.ModuriDeLucruPosibile);
         LastModified = appConfig.LastModified;
-        filePath = appConfig.FilePath;
+        FilePath = appConfig.FilePath;
     }
 
 
     public static explicit operator AppConfigVM(AppConfig appConfig)
     {
         return new AppConfigVM(appConfig);
-       
+
     }
 }

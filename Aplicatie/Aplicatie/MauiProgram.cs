@@ -6,14 +6,9 @@ using Aplicatie.ViewModels;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using Aplicatie.Core;
-using Microsoft.Maui.LifecycleEvents;
-using Microsoft.Maui.Hosting;
-using System.ComponentModel.DataAnnotations;
-
-using FluentValidation;
-using Microsoft.Maui.Controls;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Maui.Controls.Xaml;
+using Aplicatie.Views;
+using CommunityToolkit.Maui.Markup;
+using Aplicatie.Controls;
 
 namespace Aplicatie;
 
@@ -24,10 +19,8 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
-            .UseMauiCommunityToolkit(options =>
-            {
-
-            })
+            .UseMauiCommunityToolkitMarkup()
+            .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -66,8 +59,8 @@ public static class MauiProgram
         builder.Services.AddSingletonWithShellRoute<AutomatPage, AutomatViewModel>("AutomatPage");
         builder.Services.AddSingletonWithShellRoute<ManualPage, ManualViewModel>("ManualPage");
         builder.Services.AddTransientWithShellRoute<ConfigurarePage, ConfigurareViewModel>("Config");
-        
-
+        builder.Services.AddTransientWithShellRoute<AddPage, AddViewModel>("Add");
+        builder.Services.AddTransient<Dinamic2, AppConfigVM>();
         //mauiAppBuilder.Services.AddSingleton<IAppEnvironmentService, AppEnvironmentService>(
         //   serviceProvider =>
         //   {

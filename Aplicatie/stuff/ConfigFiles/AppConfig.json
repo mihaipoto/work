@@ -8,5 +8,8 @@
     ],
     "LastModified": "0001-01-01T00:00:00",
     "FilePath": "D:\\work\\Aplicatie\\stuff\\ConfigFiles\\AppConfig.json"
+  },
+  "UsbServiceConfig": {
+    "WqlEventQueryString": "SELECT * FROM Win32_VolumeChangeEvent WHERE EventType = 2 or EventType = 3"
   }
 }

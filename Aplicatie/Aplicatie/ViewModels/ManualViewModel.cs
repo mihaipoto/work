@@ -52,5 +52,11 @@ public partial class ManualViewModel : ObservableValidator
         await _navigationService.NavigateToAsync("Config");
     }
 
-   
+    [RelayCommand]
+    public async Task GoToAdd()
+    {
+        await _navigationService.NavigateToAsync("Add");
+    }
+
+
 }

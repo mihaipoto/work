@@ -1,15 +1,26 @@
 ﻿using Aplicatie.Core;
 using Aplicatie.Services;
+using System.Diagnostics;
 
 namespace Aplicatie;
 
 public partial class App : Application
 {
+
     public App(FlowControl fc, INavigationService navigationService)
     {
-        InitializeComponent();
+        try
+        {
+            InitializeComponent();
 
-        MainPage = new AppShell(navigationService);
+            MainPage = new AppShell(navigationService);
+        }
+        catch (Exception ex)
+        {
+
+            Debug.WriteLine(ex);
+        }
+        
     }
 
     protected override Window CreateWindow(IActivationState activationState)
