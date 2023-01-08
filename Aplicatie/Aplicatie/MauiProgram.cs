@@ -60,7 +60,7 @@ public static class MauiProgram
         builder.Services.AddSingletonWithShellRoute<ManualPage, ManualViewModel>("ManualPage");
         builder.Services.AddTransientWithShellRoute<ConfigurarePage, ConfigurareViewModel>("Config");
         builder.Services.AddTransientWithShellRoute<AddPage, AddViewModel>("Add");
-        builder.Services.AddTransient<Dinamic2, AppConfigVM>();
+        builder.Services.AddTransient<Dinamic>();
         //mauiAppBuilder.Services.AddSingleton<IAppEnvironmentService, AppEnvironmentService>(
         //   serviceProvider =>
         //   {

@@ -8,12 +8,18 @@
              xmlns:controls="clr-namespace:Aplicatie.Controls"
              Title="AddPage">
     <VerticalStackLayout>
-        <Label 
-            Text="{Binding AppConfig.ModDeLucru}"
-            TextColor="red"
-            VerticalOptions="Start" 
-            HorizontalOptions="Start" />
-        <controls:Dinamic2 BindingContext="{Binding AppConfig}"
-                          ViewModel="{Binding BindingContext.AppConfig, Source={x:Reference this}}"/>
+        <Label Text="{Binding AppConfig.ModDeLucru}"
+               TextColor="red"
+               VerticalOptions="Start"
+               HorizontalOptions="Start" />
+        
+        <Picker x:Name="fluxPicker"
+                ItemsSource="{Binding BindingContext.AppConfig.Fluxuri, Source={x:Reference this}}"
+                x:DataType="viewModels:FluxModelVM"
+                ItemDisplayBinding="{Binding IdFlux}"
+                />
+
+        <controls:Dinamic BindingContext="{Binding Source={x:Reference fluxPicker}, Path=SelectedItem}"
+                          ViewModel="{Binding Source={x:Reference fluxPicker}, Path=SelectedItem}" />
     </VerticalStackLayout>
 </ContentPage>

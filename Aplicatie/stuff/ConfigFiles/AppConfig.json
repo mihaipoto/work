@@ -7,7 +7,62 @@
       "Hibrid"
     ],
     "LastModified": "0001-01-01T00:00:00",
-    "FilePath": "D:\\work\\Aplicatie\\stuff\\ConfigFiles\\AppConfig.json"
+    "FilePath": "D:\\work\\Aplicatie\\stuff\\ConfigFiles\\AppConfig.json",
+    "Fluxuri": [
+      {
+        "IdFlux": 1,
+        "Enumerabile": [
+          {
+            "Nume": "enum11",
+            "Valori": [ "enum11val1", "enum11val2" ]
+          },
+          {
+            "Nume": "enum12",
+            "Valori": [ "enum12val1" ]
+          },
+          {
+            "Nume": "enum13",
+            "Valori": []
+          }
+        ]
+      },
+      {
+        "IdFlux": 2,
+        "Enumerabile": [
+          {
+            "Nume": "enum21",
+            "Valori": [ "enum11val1" ]
+          },
+          {
+            "Nume": "enum22",
+            "Valori": [ "enum22val1", "enum22val2", "enum22val3", "enum22val4" ]
+          },
+          {
+            "Nume": "enum23",
+            "Valori": []
+          }
+        ]
+      },
+      {
+        "IdFlux": 3,
+        "Enumerabile": [
+          {
+            "Nume": "enum31",
+            "Valori": [ "enum31val1"]
+          },
+          {
+            "Nume": "enum32",
+            "Valori": [ ]
+          },
+          {
+            "Nume": "enum33",
+            "Valori": [ "enum33val1", "enum33val2" ]
+          }
+        ]
+      }
+
+     
+    ]
   },
   "UsbServiceConfig": {
     "WqlEventQueryString": "SELECT * FROM Win32_VolumeChangeEvent WHERE EventType = 2 or EventType = 3"
