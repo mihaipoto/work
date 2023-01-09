@@ -1,15 +1,16 @@
 ﻿using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.Unicode;
 
 namespace Aplicatie.Core.Modele;
 
 public record AppConfig
 {
-    public string ModDeLucru { get; set; }
+    public List<ModDeLucru> ModuriDeLucru { get; set; }
 
-    public List<string> ModuriDeLucruPosibile { get; set; }
+    
     public DateTime LastModified { get; set; }
     public string FilePath { get; set; }
 
@@ -21,17 +22,45 @@ public record AppConfig
 
     public AppConfig(AppConfig appConfig)
     {
-        ModDeLucru = appConfig.ModDeLucru;
-        ModuriDeLucruPosibile = new();
-        ModuriDeLucruPosibile.MapeazaLista(appConfig.ModuriDeLucruPosibile);
+        ModuriDeLucru = new();
+        ModuriDeLucru.MapeazaLista<ModDeLucru, ModDeLucru>(appConfig.ModuriDeLucru, creator: m => new (m));
         Fluxuri= new();
         Fluxuri.MapeazaLista<FluxModel, FluxModel>(listaSursa: appConfig.Fluxuri, creator: f => new(f));
         LastModified = appConfig.LastModified;
         FilePath = appConfig.FilePath;
     }
+
+    [JsonIgnore]
+    public List<string> GetListaNumeModuriDeLucru => ModuriDeLucru.Select(m => m.Nume).ToList();
+
+    [JsonIgnore]
+    public string GetNumeModDeLucruActual => ModuriDeLucru.Where(m=> m.EsteActiv == true).Select(m => m.Nume).FirstOrDefault();
 }
 
-public class FluxModel
+public class ModDeLucru
+{
+    public string Nume { get; set; }
+
+    public bool EsteActiv { get; set; }
+
+    public ModDeLucru()
+    {
+
+    }
+    public ModDeLucru(ModDeLucru modDeLucru)
+    {
+        Nume= modDeLucru.Nume;
+        EsteActiv = modDeLucru.EsteActiv;
+    }
+
+    public static ModDeLucru Create(ModDeLucru modDeLucru)
+    {
+        return new ModDeLucru(modDeLucru);
+    }
+}
+
+
+    public class FluxModel
 {
     public int IdFlux { get; set; }
     public List<Enumerabil> Enumerabile { get; set; }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Aplicatie.Controls.AppConfig"
+             xmlns:viewmodel="clr-namespace:Aplicatie.ViewModels"
+             x:DataType="viewmodel:AppConfigVM">
+    <HorizontalStackLayout Spacing="5">
+        <Label Text="Selectati modul de lucru:" />
+        <CollectionView BindingContext="{Binding ModuriDeLucru}"
+                        ItemsSource="{Binding }"
+                        ItemsLayout="HorizontalList" 
+                        RadioButtonGroup.GroupName="ttt">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="viewmodel:ModDeLucruVM">
+                    <HorizontalStackLayout>
+
+                        <RadioButton 
+                            Value="{Binding Nume}"
+                                     Content="{Binding Nume}"
+                                     IsChecked="{Binding EsteActiv}"  />
+                    </HorizontalStackLayout>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </HorizontalStackLayout>
+</ContentView>

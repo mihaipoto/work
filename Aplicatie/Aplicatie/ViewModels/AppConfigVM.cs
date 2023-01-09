@@ -14,10 +14,8 @@ namespace Aplicatie.ViewModels;
 public partial class AppConfigVM : ObservableObject
 {
     [ObservableProperty]
-    string modDeLucru;
+    List<ModDeLucruVM> moduriDeLucru;
 
-    [ObservableProperty]
-    List<string> moduriDeLucruPosibile;
 
     [ObservableProperty]
     DateTime lastModified;
@@ -31,9 +29,9 @@ public partial class AppConfigVM : ObservableObject
 
     public AppConfigVM(AppConfig appConfig)
     {
-        ModDeLucru = appConfig.ModDeLucru;
-        ModuriDeLucruPosibile = new();
-        ModuriDeLucruPosibile.MapeazaLista(appConfig.ModuriDeLucruPosibile);
+        ModuriDeLucru = new();
+        ModuriDeLucru.MapeazaLista(appConfig.ModuriDeLucru, creator: m => new(m));
+        
         LastModified = appConfig.LastModified;
         FilePath = appConfig.FilePath;
         Fluxuri = new();
@@ -54,7 +52,28 @@ public partial class AppConfigVM : ObservableObject
     //    return appConfigVM.ToAppConfig();
     //}
 
+   
+}
 
+public partial class ModDeLucruVM : ObservableObject
+{
+    [ObservableProperty]
+    string nume;
+
+    [ObservableProperty]
+    bool esteActiv;
+
+    public ModDeLucruVM()
+    {
+
+    }
+    public ModDeLucruVM(ModDeLucru modDeLucru)
+    {
+        Nume = modDeLucru.Nume;
+        EsteActiv = modDeLucru.EsteActiv;
+    }
+
+   
 }
 
 public partial class FluxModelVM : ObservableObject
@@ -117,8 +136,8 @@ public static class AppConfigExtensions
     public static AppConfig ToAppConfig(this AppConfigVM appConfigVM)
     {
         var appConfig = new AppConfig();
-        appConfig.ModDeLucru = appConfigVM.ModDeLucru;
-        appConfig.ModuriDeLucruPosibile.MapeazaLista(appConfigVM.ModuriDeLucruPosibile);
+        appConfig.ModuriDeLucru = new();
+        appConfig.ModuriDeLucru.MapeazaLista(appConfigVM.ModuriDeLucru, creator: m => m.ToModDeLucru());
         appConfig.LastModified = appConfigVM.LastModified;
         appConfig.FilePath = appConfigVM.FilePath;
         appConfig.Fluxuri.MapeazaLista<FluxModelVM,FluxModel>(
@@ -126,6 +145,14 @@ public static class AppConfigExtensions
             creator: f => f.ToFluxModel());
         return appConfig;
 
+    }
+
+    public static ModDeLucru ToModDeLucru(this ModDeLucruVM modDeLucruVM)
+    {
+        var modDeLucru = new ModDeLucru();
+        modDeLucru.Nume = modDeLucruVM.Nume;
+        modDeLucru.EsteActiv = modDeLucruVM.EsteActiv;
+        return modDeLucru;
     }
 
     public static FluxModel ToFluxModel(this FluxModelVM fluxModelVM)

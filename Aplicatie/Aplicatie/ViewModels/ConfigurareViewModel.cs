@@ -1,6 +1,8 @@
-﻿using Aplicatie.Services;
+﻿using Aplicatie.Core.Modele;
+using Aplicatie.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Options;
 
 namespace Aplicatie.ViewModels;
 
@@ -9,16 +11,23 @@ public partial class ConfigurareViewModel : ObservableValidator
     private readonly IDialogService _dialogService;
     private readonly INavigationService _navigationService;
 
-    
+    [ObservableProperty]
+    AppConfigVM appConfig;
 
     public AppTheme CurrentTheme => Application.Current.UserAppTheme;
 
     public ConfigurareViewModel(
+        IOptionsMonitor<AppConfig> appConfigOptions,
         IDialogService dialogService,
         INavigationService navigationService)
     {
         _dialogService = dialogService;
         _navigationService = navigationService;
+        AppConfig = new AppConfigVM(appConfigOptions.CurrentValue);
+        appConfigOptions.OnChange(optiuniNoi =>
+        {
+            AppConfig = new AppConfigVM(optiuniNoi);
+        });
     }
 
     [ObservableProperty]

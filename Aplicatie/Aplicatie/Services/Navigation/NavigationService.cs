@@ -32,7 +32,7 @@ public class NavigationService : INavigationService
         try
         {
             
-            switch (_appConfig.ModDeLucru)
+            switch (_appConfig.GetNumeModDeLucruActual)
             {
                 case "Automat":
                     await NavigateToAsync("//AutomatPage");

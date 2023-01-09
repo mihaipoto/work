@@ -73,6 +73,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Controls\AppConfig.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Controls\MetadataCheckbox.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -98,7 +101,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Pages\" />
-	  <Folder Include="ViewModels\Base\" />
 	</ItemGroup>
 
 </Project>

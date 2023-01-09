@@ -1,10 +1,19 @@
 {
   "AppConfig": {
-    "ModDeLucru": "Manual",
-    "ModuriDeLucruPosibile": [
-      "Automat",
-      "Manual",
-      "Hibrid"
+    "ModuriDeLucru": [
+      {
+        "Nume": "Automat",
+        "EsteActiv": false
+      },
+      {
+        "Nume": "Manual",
+        "EsteActiv": true
+      },
+      {
+        "Nume": "Hibrid",
+        "EsteActiv": false
+      }
+
     ],
     "LastModified": "0001-01-01T00:00:00",
     "FilePath": "D:\\work\\Aplicatie\\stuff\\ConfigFiles\\AppConfig.json",
@@ -48,11 +57,11 @@
         "Enumerabile": [
           {
             "Nume": "enum31",
-            "Valori": [ "enum31val1"]
+            "Valori": [ "enum31val1" ]
           },
           {
             "Nume": "enum32",
-            "Valori": [ ]
+            "Valori": []
           },
           {
             "Nume": "enum33",
@@ -61,7 +70,7 @@
         ]
       }
 
-     
+
     ]
   },
   "UsbServiceConfig": {

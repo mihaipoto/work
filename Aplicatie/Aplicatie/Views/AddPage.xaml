@@ -8,10 +8,7 @@
              xmlns:controls="clr-namespace:Aplicatie.Controls"
              Title="AddPage">
     <VerticalStackLayout>
-        <Label Text="{Binding AppConfig.ModDeLucru}"
-               TextColor="red"
-               VerticalOptions="Start"
-               HorizontalOptions="Start" />
+        
         
         <Picker x:Name="fluxPicker"
                 ItemsSource="{Binding BindingContext.AppConfig.Fluxuri, Source={x:Reference this}}"
