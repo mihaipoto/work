@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Aplicatie.Controls.GeneralSettingsControl"
+             xmlns:viewmodels="clr-namespace:Aplicatie.ViewModels"
+             xmlns:controls="clr-namespace:Aplicatie.Controls"
+             x:DataType="viewmodels:GeneralSettingsVM">
+    
+    <VerticalStackLayout>
+        <controls:LabelLabelController Cheie="last modified"
+                                       Valoare="{Binding LastModified}" />
+        <controls:LabelLabelController Cheie="config file path"
+                                       Valoare="{Binding ConfigFilePath}" />
+        <controls:LabelLabelController Cheie="outbox"
+                                       Valoare="{Binding OutboxPath}" />
+        <controls:LabelLabelController Cheie="inbox"
+                                       Valoare="{Binding InboxPath}" />
+    </VerticalStackLayout>
+</ContentView>

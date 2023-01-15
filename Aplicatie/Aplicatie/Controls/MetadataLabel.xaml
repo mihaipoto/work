@@ -3,11 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Aplicatie.Controls.MetadataLabel"
              xmlns:viewmodel="clr-namespace:Aplicatie.ViewModels"
-             x:DataType="viewmodel:EnumerabilVM">
+             >
     <HorizontalStackLayout>
-        <Label Text="{Binding Nume}"
+        <!--<Label Text="{Binding Nume}"
                VerticalOptions="Center" />
         <Label Text="{Binding Valori[0]}"
-               VerticalOptions="Center" />
+               VerticalOptions="Center" />-->
     </HorizontalStackLayout>
 </ContentView>

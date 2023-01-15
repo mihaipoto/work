@@ -1,8 +1,4 @@
 ﻿using Aplicatie.Services;
-using Aplicatie.Pages;
-using Aplicatie.Core.Mesaje;
-using CommunityToolkit.Mvvm.Messaging;
-using Windows.System;
 
 namespace Aplicatie;
 

@@ -5,8 +5,8 @@
              xmlns:viewmodel="clr-namespace:Aplicatie.ViewModels"
              x:DataType="viewmodel:EnumerabilVM">
     <HorizontalStackLayout>
-        <Label Text="{Binding Nume}"
+        <!--<Label Text="{Binding Nume}"
                VerticalOptions="Center" />
-        <CheckBox IsChecked="{Binding IsCheckboxChecked}" />
+        <CheckBox IsChecked="{Binding IsCheckboxChecked}" />-->
     </HorizontalStackLayout>
 </ContentView>

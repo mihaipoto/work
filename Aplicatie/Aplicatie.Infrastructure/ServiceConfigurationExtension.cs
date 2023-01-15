@@ -1,4 +1,5 @@
-﻿using Aplicatie.Core.Modele;
+﻿
+using Aplicatie.Core.Models;
 using Aplicatie.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +16,7 @@ public static class ServiceConfigurationExtension
         
         services.AddSingleton<ILoggerService, LoggerService>();
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+        services.AddSingleton<IUsbService, UsbService>();
 
         configuration.Sources.Clear();
         configuration.AddJsonFile("""D:\work\Aplicatie\stuff\ConfigFiles\AppConfig.json""", optional: true, reloadOnChange: true);

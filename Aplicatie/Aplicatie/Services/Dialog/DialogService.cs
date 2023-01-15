@@ -1,4 +1,4 @@
-﻿using Aplicatie.Pages;
+﻿
 using CommunityToolkit.Maui.Views;
 
 
@@ -16,10 +16,10 @@ public class DialogService : IDialogService
         return Application.Current.MainPage.DisplayAlert(title, message, accept, cancel);
     }
 
-    public async Task ShowAlertAsync2(string title, string message, string accept, string cancel)
-    {
-        await Application.Current.MainPage.ShowPopupAsync(new PopUpPage());
-    }
+    //public async Task ShowAlertAsync2(string title, string message, string accept, string cancel)
+    //{
+    //    await Application.Current.MainPage.ShowPopupAsync(new PopUpPage());
+    //}
 
     public Task<string> ShowActionsAsync(string title, string message, string destruction, params string[] buttons)
     {

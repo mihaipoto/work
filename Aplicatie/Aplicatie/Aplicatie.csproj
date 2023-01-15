@@ -61,19 +61,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Views\ManualPage.xaml.cs">
-	    <DependentUpon>ManualPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\AutomatPage.xaml.cs">
-	    <DependentUpon>AutomatPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\PopUpView\PopUpPage.xaml.cs">
-	    <DependentUpon>PopUpPage.xaml</DependentUpon>
+	  <Compile Update="Controls\AppConfigControl.xaml.cs">
+	    <DependentUpon>AppConfigControl.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Controls\AppConfig.xaml">
+	  <MauiXaml Update="Controls\AppConfigControl.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\LabelEntryControl.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\LabelLabelController.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Controls\MetadataCheckbox.xaml">
@@ -88,19 +88,23 @@
 	  <MauiXaml Update="Controls\MetadataLabel.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\AddPage.xaml">
+	  <MauiXaml Update="Pages\AddPage\AddPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\ConfigurarePage.xaml">
+	  <MauiXaml Update="Pages\ConfigPage\ConfigurarePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\ManualPage.xaml">
+	  <MauiXaml Update="Pages\ConfigPage\Controls\GeneralSettingsControl.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\StartPage\StartPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Pages\" />
+	  <Folder Include="Controls\Generic\" />
+	  <Folder Include="Views\" />
 	</ItemGroup>
 
 </Project>

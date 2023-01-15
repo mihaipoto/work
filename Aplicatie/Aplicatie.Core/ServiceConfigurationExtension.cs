@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Aplicatie.Core.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 
 namespace Aplicatie.Core;
@@ -9,8 +10,8 @@ public static class ServiceConfigurationExtension
       this IServiceCollection services)
     {
 
-        
-        services.AddSingleton<FlowControl>();
+        services.AddSingleton<FlowManagerService>();
+      
 
         return services;
     }

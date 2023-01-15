@@ -1,0 +1,42 @@
+﻿using Aplicatie.Core.Models.Configuratie;
+using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
+
+namespace Aplicatie.Core.Models;
+
+
+public record AppConfig
+{
+    public GeneralSettings GeneralConfiguration { get; set; }
+
+    public List<FlowItemSettings> FlowListConfiguration { get; set; }
+
+    public UsbServiceSettings UsbServiceConfiguration { get; set; }
+
+    public Workflow WorkflowConfiguration { get; set; }
+    public AppConfig()
+    {
+    }
+
+    public AppConfig(AppConfig source)
+    {
+        try
+        {
+            GeneralConfiguration = new(source.GeneralConfiguration);
+            WorkflowConfiguration= new(source.WorkflowConfiguration);
+            FlowListConfiguration = new();
+            FlowListConfiguration.MapList(
+               listaSursa: source.FlowListConfiguration,
+               creator: f => new(f));
+            UsbServiceConfiguration = new(source.UsbServiceConfiguration);
+        }
+        catch (Exception ex )
+        {
+
+            throw;
+        }
+       
+    }
+
+}
+

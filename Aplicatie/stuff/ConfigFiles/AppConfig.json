@@ -1,37 +1,35 @@
 {
   "AppConfig": {
-    "ModuriDeLucru": [
-      {
-        "Nume": "Automat",
-        "EsteActiv": false
-      },
-      {
-        "Nume": "Manual",
-        "EsteActiv": true
-      },
-      {
-        "Nume": "Hibrid",
-        "EsteActiv": false
-      }
-
-    ],
-    "LastModified": "0001-01-01T00:00:00",
-    "FilePath": "D:\\work\\Aplicatie\\stuff\\ConfigFiles\\AppConfig.json",
-    "Fluxuri": [
+    "GeneralConfiguration": {
+      "LastModified": "0001-01-01T00:00:00",
+      "ConfigFilePath": "D:\\work\\Aplicatie\\stuff\\ConfigFiles\\AppConfig.json",
+      "OutboxPath": "D:\\work\\Aplicatie\\stuff\\outbox",
+      "InboxPath": "D:\\work\\Aplicatie\\stuff\\inbox"
+    },
+    "WorkflowConfiguration": {
+      "UsbWatcher": true,
+      "AVUserInput": true,
+      "ClassificationUserInput": false,
+      "ContainerUserInput": true
+    },
+    "FlowListConfiguration": [
       {
         "IdFlux": 1,
         "Enumerabile": [
           {
             "Nume": "enum11",
-            "Valori": [ "enum11val1", "enum11val2" ]
+            "Valori": [ "enum11val1", "enum11val2" ],
+            "RegexValidator": "[a-z]"
           },
           {
             "Nume": "enum12",
-            "Valori": [ "enum12val1" ]
+            "Valori": [ "enum12val1" ],
+            "RegexValidator": "[a-z]"
           },
           {
             "Nume": "enum13",
-            "Valori": []
+            "Valori": [],
+            "RegexValidator": "[a-z]"
           }
         ]
       },
@@ -40,15 +38,18 @@
         "Enumerabile": [
           {
             "Nume": "enum21",
-            "Valori": [ "enum11val1" ]
+            "Valori": [ "enum11val1" ],
+            "RegexValidator": "[a-z]"
           },
           {
             "Nume": "enum22",
-            "Valori": [ "enum22val1", "enum22val2", "enum22val3", "enum22val4" ]
+            "Valori": [ "enum22val1", "enum22val2", "enum22val3", "enum22val4" ],
+            "RegexValidator": "[a-z]"
           },
           {
             "Nume": "enum23",
-            "Valori": []
+            "Valori": [],
+            "RegexValidator": "[a-z]"
           }
         ]
       },
@@ -69,11 +70,10 @@
           }
         ]
       }
-
-
-    ]
-  },
-  "UsbServiceConfig": {
-    "WqlEventQueryString": "SELECT * FROM Win32_VolumeChangeEvent WHERE EventType = 2 or EventType = 3"
+    ],
+    "UsbServiceConfiguration": {
+      "WqlEventQuery": "SELECT * FROM Win32_VolumeChangeEvent WHERE EventType = 2 or EventType = 3",
+      "ManagementObjectSearcher": "SELECT * FROM Win32_DiskDrive"
+    }
   }
 }

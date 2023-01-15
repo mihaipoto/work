@@ -16,69 +16,69 @@ public enum TipControl
 public class Dinamic : ContentView
 {
 
-    public static readonly BindableProperty ViewModelProperty = BindableProperty.Create("ViewModel", 
-        typeof(FluxModelVM), typeof(Dinamic), propertyChanged: OnViewModelChanged);
+    //public static readonly BindableProperty ViewModelProperty = BindableProperty.Create("ViewModel", 
+    //    typeof(FluxModelVM), typeof(Dinamic), propertyChanged: OnViewModelChanged);
 
-    private static void OnViewModelChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-        var f = (Dinamic)bindable;
-        f.Afiseaza((FluxModelVM)newValue);
-        Debug.WriteLine(newValue.ToString());
-    }
+    //private static void OnViewModelChanged(BindableObject bindable, object oldValue, object newValue)
+    //{
+    //    var f = (Dinamic)bindable;
+    //    f.Afiseaza((FluxModelVM)newValue);
+    //    Debug.WriteLine(newValue.ToString());
+    //}
 
-    public FluxModelVM ViewModel
-    {
-        get => (FluxModelVM)GetValue(Dinamic.ViewModelProperty);
-        set => SetValue(Dinamic.ViewModelProperty, value);
-    }
+    //public FluxModelVM ViewModel
+    //{
+    //    get => (FluxModelVM)GetValue(Dinamic.ViewModelProperty);
+    //    set => SetValue(Dinamic.ViewModelProperty, value);
+    //}
 
-    VerticalStackLayout parent;
+    //VerticalStackLayout parent;
 
-    void Afiseaza(FluxModelVM vm)
-    {
-        parent = new VerticalStackLayout();
-        vm.Enumerabile.ForEach(e => ConstruiesteController(e));
+    //void Afiseaza(FluxModelVM vm)
+    //{
+    //    parent = new VerticalStackLayout();
+    //    vm.Enumerabile.ForEach(e => ConstruiesteController(e));
        
-        Content= parent;
-    }
+    //    Content= parent;
+    //}
 
-    void ConstruiesteController(EnumerabilVM e)
-    {
-        if (e.Valori.Count == 0) ConstruiesteEntry(e);
-        if (e.Valori.Count == 1) ConstruiesteLabel(e);
-        if (e.Valori.Count == 2) ConstruiesteCheckbox(e);
-        if (e.Valori.Count > 2) ConstruiesteGrupCheckbox(e);
+    //void ConstruiesteController(EnumerabilVM e)
+    //{
+    //    if (e.Valori.Count == 0) ConstruiesteEntry(e);
+    //    if (e.Valori.Count == 1) ConstruiesteLabel(e);
+    //    if (e.Valori.Count == 2) ConstruiesteCheckbox(e);
+    //    if (e.Valori.Count > 2) ConstruiesteGrupCheckbox(e);
         
-    }
+    //}
 
-    private void ConstruiesteGrupCheckbox(EnumerabilVM e)
-    {
-        var grupCheckboxControl = new MetadataGrupCheckbox();
-        grupCheckboxControl.BindingContext = e;
-        parent.Children.Add(grupCheckboxControl);
-    }
+    //private void ConstruiesteGrupCheckbox(EnumerabilVM e)
+    //{
+    //    var grupCheckboxControl = new MetadataGrupCheckbox();
+    //    grupCheckboxControl.BindingContext = e;
+    //    parent.Children.Add(grupCheckboxControl);
+    //}
 
-    private void ConstruiesteCheckbox(EnumerabilVM e)
-    {
-        var checkboxControl = new MetadataCheckbox();
-        checkboxControl.BindingContext = e;
-        parent.Children.Add(checkboxControl);
+    //private void ConstruiesteCheckbox(EnumerabilVM e)
+    //{
+    //    var checkboxControl = new MetadataCheckbox();
+    //    checkboxControl.BindingContext = e;
+    //    parent.Children.Add(checkboxControl);
 
-    }
+    //}
 
-    private void ConstruiesteLabel(EnumerabilVM e)
-    {
-        var labelControl = new MetadataLabel();
-        labelControl.BindingContext = e;   
-        parent.Children.Add(labelControl);
-    }
+    //private void ConstruiesteLabel(EnumerabilVM e)
+    //{
+    //    var labelControl = new MetadataLabel();
+    //    labelControl.BindingContext = e;   
+    //    parent.Children.Add(labelControl);
+    //}
 
-    private void ConstruiesteEntry(EnumerabilVM e)
-    {
-        var entryControl = new MetadataEntry();
-        entryControl.BindingContext = e;
-        parent.Children.Add(entryControl);
-    }
+    //private void ConstruiesteEntry(EnumerabilVM e)
+    //{
+    //    var entryControl = new MetadataEntry();
+    //    entryControl.BindingContext = e;
+    //    parent.Children.Add(entryControl);
+    //}
 
    
 }

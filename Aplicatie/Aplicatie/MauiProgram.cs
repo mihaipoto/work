@@ -1,7 +1,7 @@
 ﻿using Aplicatie.Infrastructure;
 using Aplicatie.Platforms.Windows;
 using Aplicatie.Services;
-using Aplicatie.Pages;
+
 using Aplicatie.ViewModels;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
@@ -9,6 +9,7 @@ using Aplicatie.Core;
 using Aplicatie.Views;
 using CommunityToolkit.Maui.Markup;
 using Aplicatie.Controls;
+using Aplicatie.Repositories;
 
 namespace Aplicatie;
 
@@ -51,15 +52,16 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 
         
-        builder.Services.AddTransient<GuidService>();
+        
+        //builder.Services.AddTransient<ConfigRepository>();
 
         builder.Services.AddSingleton<FolderPicker>();
         builder.Services.AddSingleton<IDialogService, DialogService>();
 		builder.Services.AddSingleton<INavigationService, NavigationService>();
-        builder.Services.AddSingletonWithShellRoute<AutomatPage, AutomatViewModel>("AutomatPage");
-        builder.Services.AddSingletonWithShellRoute<ManualPage, ManualViewModel>("ManualPage");
+        
         builder.Services.AddTransientWithShellRoute<ConfigurarePage, ConfigurareViewModel>("Config");
         builder.Services.AddTransientWithShellRoute<AddPage, AddViewModel>("Add");
+        builder.Services.AddSingletonWithShellRoute<StartPage, StartViewModel>("StartPage");
         builder.Services.AddTransient<Dinamic>();
         //mauiAppBuilder.Services.AddSingleton<IAppEnvironmentService, AppEnvironmentService>(
         //   serviceProvider =>

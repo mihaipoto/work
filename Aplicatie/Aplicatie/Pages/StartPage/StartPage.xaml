@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Aplicatie.Views.StartPage"
+             Title="StartPage">
+    <Grid RowDefinitions="*, auto">
+        <ActivityIndicator Grid.RowSpan="2"
+                           IsVisible="{Binding IsBusy}"
+                           IsRunning="{Binding IsBusy}">
+
+        </ActivityIndicator>
+        <ListView ItemsSource="{Binding Evenimente}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextCell Text="{Binding }"
+                              Detail="{Binding }" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <HorizontalStackLayout Grid.Row="1"
+                               Margin="10">
+
+            
+            <Button Text="Settings"
+                    Command="{Binding GoToConfigCommand}"
+                    HorizontalOptions="EndAndExpand"
+                    VerticalOptions="EndAndExpand" />
+        </HorizontalStackLayout>
+
+    </Grid>
+</ContentPage>

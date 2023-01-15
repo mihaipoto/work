@@ -7,7 +7,7 @@ namespace Aplicatie;
 public partial class App : Application
 {
 
-    public App(FlowControl fc, INavigationService navigationService)
+    public App(INavigationService navigationService)
     {
         try
         {
