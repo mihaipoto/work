@@ -4,6 +4,7 @@ using Aplicatie.Services;
 using CommunityToolkit.Maui.Markup;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Options;
 using System.Collections.ObjectModel;
 using Windows.Storage.Provider;
 
@@ -15,10 +16,10 @@ public partial class StartViewModel : ObservableObject
 
     private readonly IDialogService _dialogService;
     private readonly INavigationService _navigationService;
-    private readonly FlowManagerService _flowManagerService;
+    private readonly FluxManager _flowManagerService;
 
     [ObservableProperty]
-    AppConfig appConfigObject;
+    AppConfigVM appConfigObject;
 
     [ObservableProperty]
     bool isBusy = false;
@@ -29,25 +30,36 @@ public partial class StartViewModel : ObservableObject
     public StartViewModel(
         IDialogService dialogService,
         INavigationService navigationService,
-        FlowManagerService flowManagerService)
+        IOptionsMonitor<AppConfig> appConfigOptionsMonitor
+        )
     {
 
         _dialogService = dialogService;
         _navigationService = navigationService;
-        _flowManagerService = flowManagerService;
-        AppConfigObject = _flowManagerService.CurrentAppConfig;
-        _flowManagerService.AppConfigChanged += _flowManagerService_OnAppConfigChanged;
-        _flowManagerService.LogErrorString += _flowManagerService_LogErrorString;
-        _flowManagerService.FluxStarted += _flowManagerService_FluxStarted1;
-        _flowManagerService.UsbDeviceInserted += _flowManagerService_UsbDeviceInserted;
-        _flowManagerService.UsbDeviceRemoved += _flowManagerService_UsbDeviceRemoved;
-        _flowManagerService.FlowScanned += _flowManagerService_FlowScanned1;
-        _flowManagerService.FlowClassified += _flowManagerService_FlowClassified;
-        _flowManagerService.FlowContainerCreated += _flowManagerService_FlowContainerCreated;
-        _flowManagerService.Eveniment += _flowManagerService_Eveniment;
+        
+        AppConfigObject = new( appConfigOptionsMonitor.CurrentValue);
+        
+        //FluxManager.LogErrorString += _flowManagerService_LogErrorString;
+        //FluxManager.FluxStarted += _flowManagerService_FluxStarted1;
+        //FluxManager.UsbDeviceInserted += _flowManagerService_UsbDeviceInserted;
+        //FluxManager.UsbDeviceRemoved += _flowManagerService_UsbDeviceRemoved;
+        //FluxManager.FlowScanned += _flowManagerService_FlowScanned1;
+        //FluxManager.FlowClassified += _flowManagerService_FlowClassified;
+        //FluxManager.FlowContainerCreated += _flowManagerService_FlowContainerCreated;
+        FluxManager.Notificare += FluxManager_Notificare;
 
 
 
+    }
+
+    private void FluxManager_Notificare(string obj)
+    {
+        MainThread.BeginInvokeOnMainThread( () =>
+        {
+
+            Evenimente.Add("inserted");
+            
+        });
     }
 
     private void _flowManagerService_FlowScanned1(ScanResult arg1, Action<bool> arg2)
@@ -72,15 +84,7 @@ public partial class StartViewModel : ObservableObject
         });
     }
 
-    private void _flowManagerService_Eveniment(bool arg1, Action<bool> arg2)
-    {
-        MainThread.BeginInvokeOnMainThread(() =>
-        {
-            Evenimente.Add("EVENIMENT");
-
-            arg2?.Invoke(false);
-        });
-    }
+   
 
     private void _flowManagerService_FlowContainerCreated(object sender, FlowContainerCreatedEventArgs e)
     {
@@ -129,17 +133,7 @@ public partial class StartViewModel : ObservableObject
         });
     }
 
-    private void _flowManagerService_OnAppConfigChanged(AppConfig obj)
-    {
-
-        MainThread.BeginInvokeOnMainThread(() =>
-        {
-            AppConfigObject = obj;
-            Evenimente.Add("appconfigchanged");
-        });
-
-
-    }
+    
 
     [RelayCommand]
     public async Task GoToConfig()

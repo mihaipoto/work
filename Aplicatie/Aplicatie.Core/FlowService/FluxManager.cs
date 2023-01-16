@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 namespace Aplicatie.Core.Services;
 
-public partial class FlowManagerService
+public sealed class FluxManager : Notifications<string>
 {
     private readonly IUsbService _usbService;
     private readonly IDateTimeProvider _timeProvider;
@@ -20,21 +20,12 @@ public partial class FlowManagerService
     Flow currentFlow;
 
 
-
-    public AppConfig CurrentAppConfig
-    {
-        get
-        {
-            return _appConfigOptions.CurrentValue;
-        }
-    }
-
-    public FlowManagerService(
+    public FluxManager(
         IUsbService usbService,
         IDateTimeProvider timeProvider,
         ILoggerService loggerService,
         IOptionsMonitor<AppConfig> appConfigOptionsMonitor
-        )
+        ) : base()
     {
 
         _timeProvider = timeProvider;
@@ -67,26 +58,27 @@ public partial class FlowManagerService
 
     private void _usbService_UsbDeviceRemoved(object? sender, UsbDeviceEventArgs e)
     {
-        Debug.WriteLine("REMOVED");
+        OnNotificare("RRRRRRRRRRRRRRRR");
+        Debug.WriteLine("REMOVED ");
         UsbDeviceRemoved?.Invoke(this, e);
 
     }
 
-    public event Action<AppConfig> AppConfigChanged;
-    public event Action<bool, Action<bool>> Eveniment;
-    public event EventHandler<UsbDeviceEventArgs> UsbDeviceRemoved;
-    public event EventHandler<UsbDeviceEventArgs> UsbDeviceInserted;
-    public event EventHandler<LogMessageEventArgs<string>> LogErrorString;
-    public event Action<Flow> FluxStarted;
-    public event Action<ScanResult, Action<bool>> FlowScanned;
-    public event EventHandler<FlowClassifiedEventArgs> FlowClassified;
-    public event EventHandler<FlowContainerCreatedEventArgs> FlowContainerCreated;
+    
+    public static event Action<bool, Action<bool>>? Eveniment;
+    public static event EventHandler<UsbDeviceEventArgs>? UsbDeviceRemoved;
+    public static event EventHandler<UsbDeviceEventArgs>? UsbDeviceInserted;
+    public static event EventHandler<LogMessageEventArgs<string>>? LogErrorString;
+    public static event Action<Flow>? FluxStarted;
+    public static event Action<ScanResult, Action<bool>>? FlowScanned;
+    public static event EventHandler<FlowClassifiedEventArgs>? FlowClassified;
+    public static event EventHandler<FlowContainerCreatedEventArgs>? FlowContainerCreated;
 
-
+    
 
     private async void _usbService_UsbDeviceInserted(object? sender, UsbDeviceEventArgs e)
     {
-
+        OnNotificare("RRRRRRRRRRRRRRRR");
         UsbDeviceInserted?.Invoke(this, e);
         Eveniment?.Invoke(true, ProcesareRaspuns);
         Debug.WriteLine("Inserted");
@@ -104,6 +96,12 @@ public partial class FlowManagerService
             LogErrorString?.Invoke(this, new LogMessageEventArgs<string>("a fost inserat un usb dar exista deja un flux"));
         }
     }
+
+    protected override void OnNotificare(string mesaj)
+    {
+        base.OnNotificare(mesaj);
+    }
+    
 
     private void ProcesareRaspuns(bool raspuns)
     {

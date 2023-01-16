@@ -1,4 +1,5 @@
 ﻿using Aplicatie.Core;
+using Aplicatie.Core.Services;
 using Aplicatie.Services;
 using System.Diagnostics;
 
@@ -7,7 +8,8 @@ namespace Aplicatie;
 public partial class App : Application
 {
 
-    public App(INavigationService navigationService)
+    public App(FluxManager fm,
+        INavigationService navigationService)
     {
         try
         {

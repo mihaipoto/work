@@ -49,13 +49,13 @@ public class UsbService : IDisposable, IUsbService
         if (eventType is EventType.Inserted)
         {
             UsbDeviceInserted?.Invoke(this, new(device));
-            Debug.WriteLine( $"Inserted {device.ToString()}" );
+            //Debug.WriteLine( $"Inserted {device.ToString()}" );
         }
             
         else if (eventType is EventType.Removed)
         {
             UsbDeviceRemoved?.Invoke(this, new(device));
-            Debug.WriteLine($"Removed {device.ToString()}");
+            //Debug.WriteLine($"Removed {device.ToString()}");
         }
             
 
@@ -74,9 +74,9 @@ public class UsbService : IDisposable, IUsbService
     public void UpdateListOfConnectedUSBDevices()
     {
         _USBDevices.Clear();
-        File.AppendAllText(@"d:\fisier.txt", "LISTA USBDEVICES");
-        Debug.WriteLine($"Update device list {DateTime.UtcNow.ToShortTimeString()}");
-        File.AppendAllText(@"d:\fisier.txt", DateTime.UtcNow.ToShortTimeString());
+        //File.AppendAllText(@"d:\fisier.txt", "LISTA USBDEVICES");
+        //Debug.WriteLine($"Update device list {DateTime.UtcNow.ToShortTimeString()}");
+        //File.AppendAllText(@"d:\fisier.txt", DateTime.UtcNow.ToShortTimeString());
         foreach (ManagementObject drive in _managementObjectSearcher.Get())
         {
             _USBDevices.Add(new USBDevice(
@@ -87,13 +87,13 @@ public class UsbService : IDisposable, IUsbService
             
 
         }
-        _USBDevices.ForEach(device =>
-        {
-            Debug.WriteLine($"Device: {device.ToString()}");
-            File.AppendAllText(@"d:\fisier.txt", device.ToString());
-            File.AppendAllText(@"d:\fisier.txt", Environment.NewLine);
+        //_USBDevices.ForEach(device =>
+        //{
+        //    Debug.WriteLine($"Device: {device.ToString()}");
+        //    File.AppendAllText(@"d:\fisier.txt", device.ToString());
+        //    File.AppendAllText(@"d:\fisier.txt", Environment.NewLine);
 
-        });
+        //});
         ListOfConnectedUSBDevicesUpdated?.Invoke(this,
             new ListOfUSBDevicesUpdatedEventArgs(uSBDevices: _USBDevices));
 

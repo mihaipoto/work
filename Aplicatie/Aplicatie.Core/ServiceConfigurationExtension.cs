@@ -10,7 +10,7 @@ public static class ServiceConfigurationExtension
       this IServiceCollection services)
     {
 
-        services.AddSingleton<FlowManagerService>();
+        services.AddSingleton<FluxManager>();
       
 
         return services;

@@ -1,8 +1,10 @@
 ﻿using Aplicatie.Core.Models;
+using Aplicatie.Core.Services;
 using Aplicatie.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Options;
+using System.Diagnostics;
 
 namespace Aplicatie.ViewModels;
 
@@ -25,9 +27,27 @@ public partial class ConfigurareViewModel : ObservableObject
     {
         _dialogService = dialogService;
         AppConfigObject = new(optionsMonitor.CurrentValue);
+        FluxManager.UsbDeviceInserted += FlowManagerService_UsbDeviceInserted;
+        FluxManager.UsbDeviceRemoved += FlowManagerService_UsbDeviceRemoved;      
     }
 
+    private void FlowManagerService_UsbDeviceRemoved(object sender, UsbDeviceEventArgs e)
+    {
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            Debug.WriteLine("USB removed din debug");
+        });
+    }
 
+    private void FlowManagerService_UsbDeviceInserted(object sender, UsbDeviceEventArgs e)
+    {
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            Debug.WriteLine("USB inserted din debug");
+        });
+    }
+
+    
 
     [ObservableProperty]
     bool isBusy = false;
