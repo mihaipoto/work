@@ -6,16 +6,16 @@ namespace Aplicatie.ViewModels;
 public partial class EnumerabilVM : ObservableObject
 {
     [ObservableProperty]
-    string nume;
+    string _nume;
 
     [ObservableProperty]
-    List<string> valori;
+    List<string> _valori;
 
     [ObservableProperty]
-    string valoareCompletata;
+    string _valoareCompletata;
 
     [ObservableProperty]
-    string regexValidator;
+    string _regexValidator;
 
     public EnumerabilVM()
     {

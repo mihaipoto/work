@@ -8,13 +8,13 @@ public partial class UsbDeviceVM : ObservableValidator
 {
 
     [ObservableProperty]
-    string deviceId;
+    string _deviceId;
 
     [ObservableProperty]
-    string pnpDeviceId;
+    string _pnpDeviceId;
 
     [ObservableProperty]
-    string hash;
+    string _hash;
 
     public UsbDeviceVM()
     {

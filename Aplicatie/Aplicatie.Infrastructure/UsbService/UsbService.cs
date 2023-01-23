@@ -10,7 +10,7 @@ namespace Aplicatie.Infrastructure;
 
 public class UsbService : IDisposable, IUsbService
 {
-    public bool IsWatcherRunning {get; set;}
+    public bool IsWatcherRunning { get; set; }
 
     private List<USBDevice> _USBDevices = new List<USBDevice>();
 
@@ -22,81 +22,76 @@ public class UsbService : IDisposable, IUsbService
     {
     }
 
-   
+
 
     public void InitializeUSBService(UsbServiceSettings usbServiceConfiguration)
     {
-        _query= new WqlEventQuery(usbServiceConfiguration.WqlEventQuery);
+        _query = new WqlEventQuery(usbServiceConfiguration.WqlEventQuery);
         _watcher.Query = _query;
         _watcher.EventArrived += _watcher_EventArrived;
         _managementObjectSearcher = new(usbServiceConfiguration.ManagementObjectSearcher);
     }
 
-   
+
 
     private void _watcher_EventArrived(object sender, EventArrivedEventArgs e)
     {
-        UpdateListOfConnectedUSBDevices();
+        var driveEvent = new USBDeviceEvent();
+        driveEvent.DriveLetter = e.NewEvent.Properties["DriveName"].Value.ToString();
+        driveEvent.Tip = (EventType)(Convert.ToInt16(e.NewEvent.Properties["EventType"].Value));
 
-        string driveName = e.NewEvent.Properties["DriveName"].Value.ToString();
-
-        EventType eventType = (EventType)(Convert.ToInt16(e.NewEvent.Properties["EventType"].Value));
-
-        string eventName = Enum.GetName(typeof(EventType), eventType);
-        var device = new USBDevice(deviceId: driveName, pnpDeviceId: eventType.ToString());
-        
-        File.AppendAllText(@"d:\fisier.txt", device.ToString());
-        if (eventType is EventType.Inserted)
+        var listaNoua = UpdateListOfConnectedUSBDevices();
+        if (driveEvent.Tip is EventType.Inserted)
         {
-            UsbDeviceInserted?.Invoke(this, new(device));
-            //Debug.WriteLine( $"Inserted {device.ToString()}" );
-        }
+            driveEvent.USBDevice = listaNoua.Except(_USBDevices).FirstOrDefault()!;
             
-        else if (eventType is EventType.Removed)
-        {
-            UsbDeviceRemoved?.Invoke(this, new(device));
-            //Debug.WriteLine($"Removed {device.ToString()}");
-        }
-            
+            OnUsbDriveInserted(driveEvent);
 
+        }
+
+        else if (driveEvent.Tip is EventType.Removed)
+        {
+            driveEvent.USBDevice = _USBDevices.Except(listaNoua).FirstOrDefault()!;
+            OnUsbDriveRemoved(driveEvent);
+
+
+        }
+        _USBDevices = listaNoua;       
     }
 
-    
-
-    public event EventHandler<ListOfUSBDevicesUpdatedEventArgs> ListOfConnectedUSBDevicesUpdated;
-
-    public event EventHandler<UsbDeviceEventArgs> UsbDeviceInserted;
-
-    public event EventHandler<UsbDeviceEventArgs> UsbDeviceRemoved;
-
-
-
-    public void UpdateListOfConnectedUSBDevices()
+    private void OnUsbDriveInserted(USBDeviceEvent uSBDeviceEvent)
     {
-        _USBDevices.Clear();
-        //File.AppendAllText(@"d:\fisier.txt", "LISTA USBDEVICES");
-        //Debug.WriteLine($"Update device list {DateTime.UtcNow.ToShortTimeString()}");
-        //File.AppendAllText(@"d:\fisier.txt", DateTime.UtcNow.ToShortTimeString());
+        UsbDeviceInserted?.Invoke(uSBDeviceEvent);
+        
+    }
+
+    private void OnUsbDriveRemoved(USBDeviceEvent uSBDeviceEvent)
+    {
+        UsbDeviceRemoved?.Invoke(uSBDeviceEvent);
+    }
+
+
+
+
+    public event Action<USBDeviceEvent> UsbDeviceInserted;
+
+    public event Action<USBDeviceEvent> UsbDeviceRemoved;
+
+
+
+    public List<USBDevice> UpdateListOfConnectedUSBDevices()
+    {
+        var listaNoua = new List<USBDevice>();
+
         foreach (ManagementObject drive in _managementObjectSearcher.Get())
         {
-            _USBDevices.Add(new USBDevice(
+            listaNoua.Add(new USBDevice(
                deviceId: (string)drive.GetPropertyValue("DeviceID"),
                pnpDeviceId: (string)drive.GetPropertyValue("PNPDeviceID")
                 ));
-            
-            
 
         }
-        //_USBDevices.ForEach(device =>
-        //{
-        //    Debug.WriteLine($"Device: {device.ToString()}");
-        //    File.AppendAllText(@"d:\fisier.txt", device.ToString());
-        //    File.AppendAllText(@"d:\fisier.txt", Environment.NewLine);
-
-        //});
-        ListOfConnectedUSBDevicesUpdated?.Invoke(this,
-            new ListOfUSBDevicesUpdatedEventArgs(uSBDevices: _USBDevices));
-
+        return listaNoua;
     }
 
     public void StartUsbListener()
@@ -104,6 +99,7 @@ public class UsbService : IDisposable, IUsbService
         if (IsWatcherRunning)
             throw new Exception("S-a incercat pornirea Listenerului USB insa acesta era deja pornit");
         _watcher.Start();
+        _USBDevices = UpdateListOfConnectedUSBDevices();
 
     }
 
@@ -111,7 +107,7 @@ public class UsbService : IDisposable, IUsbService
     {
         if (!IsWatcherRunning)
             throw new Exception("S-a incercat oprirea Listenerului USB insa acesta era deja oprit");
-        
+
         _watcher.Stop();
     }
 

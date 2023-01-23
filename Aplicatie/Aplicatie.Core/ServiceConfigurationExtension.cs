@@ -1,4 +1,5 @@
-﻿using Aplicatie.Core.Services;
+﻿using Aplicatie.Core.Models;
+using Aplicatie.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 
@@ -11,6 +12,7 @@ public static class ServiceConfigurationExtension
     {
 
         services.AddSingleton<FluxManager>();
+        //services.AddSingleton<Flow>();
       
 
         return services;

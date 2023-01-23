@@ -2,9 +2,9 @@
 
 public class FlowScannedEventArgs : EventArgs
 {
-    public ScanResult Value { get; init; }
+    public ScanResultModel Value { get; init; }
 
-	public FlowScannedEventArgs(ScanResult scanResult)
+	public FlowScannedEventArgs(ScanResultModel scanResult)
 	{
 		Value= scanResult;
 	}

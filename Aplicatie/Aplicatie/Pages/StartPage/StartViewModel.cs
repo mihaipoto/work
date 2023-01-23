@@ -1,153 +1,145 @@
 ﻿using Aplicatie.Core.Models;
 using Aplicatie.Core.Services;
 using Aplicatie.Services;
-using CommunityToolkit.Maui.Markup;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Options;
-using System.Collections.ObjectModel;
-using Windows.Storage.Provider;
-
+using System.Diagnostics;
 
 namespace Aplicatie.ViewModels;
 
 public partial class StartViewModel : ObservableObject
 {
-
-    private readonly IDialogService _dialogService;
-    private readonly INavigationService _navigationService;
-    private readonly FluxManager _flowManagerService;
-
-    [ObservableProperty]
-    AppConfigVM appConfigObject;
+    readonly IDialogService _dialogService;
+    readonly INavigationService _navigationService;
+    readonly FluxManager _flowManagerService;
 
     [ObservableProperty]
-    bool isBusy = false;
+    AppConfig _appConfigObject;
 
     [ObservableProperty]
-    FlowVM currentFlow;
+    bool _isBusy = false;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsFluxInLucru))]
+    FlowVM _currentFlow;
+
+    [ObservableProperty]
+    string _eveniment;
+
+   
+    public bool IsFluxInLucru => CurrentFlow is null ? false : true;
+
+
+    [ObservableProperty]
+    bool _isFluxExpanded;
+
 
     public StartViewModel(
         IDialogService dialogService,
         INavigationService navigationService,
-        IOptionsMonitor<AppConfig> appConfigOptionsMonitor
+        IOptionsMonitor<AppConfig> appConfigOptionsMonitor,
+        FluxManager fluxManager
         )
     {
-
         _dialogService = dialogService;
         _navigationService = navigationService;
-        
-        AppConfigObject = new( appConfigOptionsMonitor.CurrentValue);
-        
-        //FluxManager.LogErrorString += _flowManagerService_LogErrorString;
-        //FluxManager.FluxStarted += _flowManagerService_FluxStarted1;
-        //FluxManager.UsbDeviceInserted += _flowManagerService_UsbDeviceInserted;
-        //FluxManager.UsbDeviceRemoved += _flowManagerService_UsbDeviceRemoved;
-        //FluxManager.FlowScanned += _flowManagerService_FlowScanned1;
-        //FluxManager.FlowClassified += _flowManagerService_FlowClassified;
-        //FluxManager.FlowContainerCreated += _flowManagerService_FlowContainerCreated;
-        FluxManager.Notificare += FluxManager_Notificare;
+        _flowManagerService= fluxManager;
+        AppConfigObject = appConfigOptionsMonitor.CurrentValue;
 
-
-
-    }
-
-    private void FluxManager_Notificare(string obj)
-    {
-        MainThread.BeginInvokeOnMainThread( () =>
+        appConfigOptionsMonitor.OnChange((optiuniNoi) =>
         {
-
-            Evenimente.Add("inserted");
-            
+            OnAppConfigObjectChanged(AppConfigObject);
         });
+        SubscribeToEvents();
+
     }
 
-    private void _flowManagerService_FlowScanned1(ScanResult arg1, Action<bool> arg2)
+    void SubscribeToEvents()
+    {
+        _flowManagerService.UsbDeviceInserted += _flowManagerService_UsbDeviceInserted;
+        _flowManagerService.UsbDeviceRemoved += _flowManagerService_UsbDeviceRemoved;
+        _flowManagerService.FlowCreated += _flowManagerService_FlowCreated1;
+        _flowManagerService.FlowDistrus += _flowManagerService_FlowDistrus;
+    }
+
+    private void _flowManagerService_FlowCreated1(Flow arg1, Action arg2)
     {
         MainThread.BeginInvokeOnMainThread(async () =>
         {
+            Eveniment = "FlowCreated ";
+            CurrentFlow = new(arg1);
+            CurrentFlow.SubscribeEvents();
+            Debug.WriteLine("flux creat in start VM" + Thread.CurrentThread.ManagedThreadId);
             
-            Evenimente.Add("Flux scanned");
-            bool rezultat = await _dialogService.ShowConfirmationAsync(
-                title: "Confirmare utilizator",
-                message: $"rezultatul este {arg1}. Doriti sa continuati?");
-            arg2?.Invoke( rezultat );
+            
+            arg2?.Invoke();
+
         });
     }
 
-    private void _flowManagerService_FluxStarted1(Flow obj)
+    private void _flowManagerService_FlowDistrus()
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            CurrentFlow = new FlowVM(obj);
-            Evenimente.Add("Flux started");
+            Debug.WriteLine("flow distrus startvm" + Thread.CurrentThread.ManagedThreadId);
+            CurrentFlow.UnsubscribeEvents();
+            CurrentFlow = null;
+
         });
-    }
-
-   
-
-    private void _flowManagerService_FlowContainerCreated(object sender, FlowContainerCreatedEventArgs e)
-    {
-        MainThread.BeginInvokeOnMainThread(() => { Evenimente.Add("conteiner created"); });
-    }
-
-    private void _flowManagerService_FlowClassified(object sender, FlowClassifiedEventArgs e)
-    {
-        MainThread.BeginInvokeOnMainThread(() => { Evenimente.Add("classified"); });
-    }
-
-   
-
-    private void _flowManagerService_UsbDeviceRemoved(object sender, UsbDeviceEventArgs e)
-    {
-        MainThread.BeginInvokeOnMainThread(() => { Evenimente.Add("removed"); });
-    }
-
-    [ObservableProperty]
-    ObservableCollection<string> evenimente = new();
-
-    private void _flowManagerService_UsbDeviceInserted(object sender, UsbDeviceEventArgs e)
-    {
-        MainThread.BeginInvokeOnMainThread(() => { Evenimente.Add("inserted"); });
-
-
-    }
-
-
-    private void _flowManagerService_FluxStarted(object sender, FlowEventArgs e)
-    {
-        MainThread.BeginInvokeOnMainThread(() =>
-        {
-            CurrentFlow = new FlowVM(e.CurrentFlow);
-            Evenimente.Add("Flux started");
-        });
-
-    }
-
-    private void _flowManagerService_LogErrorString(object sender, LogMessageEventArgs<string> e)
-    {
-
-        MainThread.BeginInvokeOnMainThread(() =>
-        {
-            Evenimente.Add("eroare");
-        });
+        
     }
 
     
 
+   
+
+    
+
+    private void _flowManagerService_UsbDeviceRemoved(USBDeviceEvent obj)
+    {
+        MainThread.BeginInvokeOnMainThread(async () =>
+        {
+            Eveniment = "Removed : " + obj.ToString();
+            Debug.WriteLine("USb removed start VM" + Thread.CurrentThread.ManagedThreadId);
+            
+            //OnEvenimentChanged("Removed : " + obj.ToString());
+
+        });
+    }
+
+    private void _flowManagerService_UsbDeviceInserted(USBDeviceEvent obj)
+    {
+        MainThread.BeginInvokeOnMainThread(async () =>
+        {
+            Eveniment = "Inserted : " + obj.ToString();
+            Debug.WriteLine("usb inserted start VM" + Thread.CurrentThread.ManagedThreadId);
+            
+            //OnEvenimentChanged("Inserted : " + obj.ToString());
+        });
+    }
+
+
+
+
+    [RelayCommand]
+    public async Task ToggleFluxExpand()
+    {
+        IsFluxExpanded = !IsFluxExpanded;
+    }
+
+
+
+
     [RelayCommand]
     public async Task GoToConfig()
     {
-
-
         await _navigationService.NavigateToAsync("Config");
     }
-
 
     [RelayCommand]
     public async Task GoToAdd()
     {
         await _navigationService.NavigateToAsync("Add");
     }
-
 }

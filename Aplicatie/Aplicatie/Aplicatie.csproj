@@ -64,28 +64,34 @@
 	  <Compile Update="Controls\AppConfigControl.xaml.cs">
 	    <DependentUpon>AppConfigControl.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Controls\Generic\LabelLabelControl.xaml.cs">
+	    <DependentUpon>LabelLabelControl.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <MauiXaml Update="Controls\AppConfigControl.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Controls\LabelEntryControl.xaml">
+	  <MauiXaml Update="Controls\Etapa2Control.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Controls\LabelLabelController.xaml">
+	  <MauiXaml Update="Controls\FlowControl.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Controls\MetadataCheckbox.xaml">
+	  <MauiXaml Update="Controls\Generic\AcceptCancelControl.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Controls\MetadataEntry.xaml">
+	  <MauiXaml Update="Controls\Generic\LabelEntryControl.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Controls\MetadataGrupCheckbox.xaml">
+	  <MauiXaml Update="Controls\Generic\LabelLabelControl.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Controls\MetadataLabel.xaml">
+	  <MauiXaml Update="Controls\ItemEtapa2Control.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\SubItemEtapa2.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\AddPage\AddPage.xaml">
@@ -94,7 +100,7 @@
 	  <MauiXaml Update="Pages\ConfigPage\ConfigurarePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\ConfigPage\Controls\GeneralSettingsControl.xaml">
+	  <MauiXaml Update="Controls\GeneralSettingsControl.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\StartPage\StartPage.xaml">
@@ -103,7 +109,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Controls\Generic\" />
 	  <Folder Include="Views\" />
 	</ItemGroup>
 

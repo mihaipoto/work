@@ -8,10 +8,10 @@ namespace Aplicatie.ViewModels;
 public partial class FlowItemConfigurationVM : ObservableValidator
 {
     [ObservableProperty]
-    public int idFlux;
+    int _idFlux;
 
     [ObservableProperty]
-    public List<EnumerabilVM> enumerabile;
+    List<EnumerabilVM> _enumerabile;
 
 
     public FlowItemConfigurationVM()

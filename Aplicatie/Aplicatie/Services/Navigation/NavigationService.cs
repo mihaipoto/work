@@ -15,9 +15,9 @@ public class NavigationService : INavigationService
     {
         
 
-        appConfigOptions.OnChange(optiuniNoi =>
+        appConfigOptions.OnChange(async optiuniNoi =>
         {
-            InitializeAsync();
+            await InitializeAsync();
         });
     }
 

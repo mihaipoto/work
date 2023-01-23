@@ -5,11 +5,11 @@ namespace Aplicatie.Core.Contracts;
 
 public interface IUsbService
 {
-    event EventHandler<ListOfUSBDevicesUpdatedEventArgs> ListOfConnectedUSBDevicesUpdated;
+    
 
-    event EventHandler<UsbDeviceEventArgs> UsbDeviceInserted;
+    event Action<USBDeviceEvent> UsbDeviceInserted;
 
-    event EventHandler<UsbDeviceEventArgs> UsbDeviceRemoved;
+    event Action<USBDeviceEvent> UsbDeviceRemoved;
     void StartUsbListener();
     void StopUsbListener();
 

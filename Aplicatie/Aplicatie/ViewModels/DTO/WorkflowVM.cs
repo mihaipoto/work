@@ -11,18 +11,18 @@ namespace Aplicatie.ViewModels;
 public partial class WorkflowVM : ObservableObject
 {
     [ObservableProperty]
-    public bool usbWatcher;
+    public bool _usbWatcher;
 
     [ObservableProperty]
-    public bool aVUserInput;
-
-
-    [ObservableProperty]
-    public bool classificationUserInput;
+    public bool _aVUserInput;
 
 
     [ObservableProperty]
-    public bool containerUserInput;
+    public bool _classificationUserInput;
+
+
+    [ObservableProperty]
+    public bool _containerUserInput;
 
     public WorkflowVM()
     {
@@ -32,10 +32,10 @@ public partial class WorkflowVM : ObservableObject
     public Workflow ToModel()
     {
         Workflow model = new();
-        model.AVUserInput = aVUserInput;
-        model.ContainerUserInput = containerUserInput;
-        model.ClassificationUserInput = classificationUserInput;
-        model.UsbWatcher= usbWatcher;
+        model.AVUserInput = AVUserInput;
+        model.ContainerUserInput = ContainerUserInput;
+        model.ClassificationUserInput = ClassificationUserInput;
+        model.UsbWatcher= UsbWatcher;
         return model;
     }
 

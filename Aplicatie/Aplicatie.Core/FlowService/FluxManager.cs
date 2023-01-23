@@ -1,23 +1,30 @@
 ﻿using Aplicatie.Core.Contracts;
-using Aplicatie.Core.Enums;
 using Aplicatie.Core.Models;
 using Aplicatie.Core.Models.Configuratie;
-using Aplicatie.Core.Models.Messages;
-using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
 
 namespace Aplicatie.Core.Services;
 
-public sealed class FluxManager : Notifications<string>
+public sealed class FluxManager
+
 {
     private readonly IUsbService _usbService;
     private readonly IDateTimeProvider _timeProvider;
     private readonly ILoggerService _loggerService;
     private readonly IOptionsMonitor<AppConfig> _appConfigOptions;
 
+    Flow _fluxCurent;
 
-    Flow currentFlow;
+    
+
+    public Workflow CurrentWorkflowConfiguration => _appConfigOptions.CurrentValue.WorkflowConfiguration;
+
+    public event Action<Flow, Action> FlowCreated;
+    public event Action FlowDistrus;
+    public event Action<USBDeviceEvent>? UsbDeviceRemoved;
+    public event Action<USBDeviceEvent>? UsbDeviceInserted;
+   
 
 
     public FluxManager(
@@ -25,9 +32,10 @@ public sealed class FluxManager : Notifications<string>
         IDateTimeProvider timeProvider,
         ILoggerService loggerService,
         IOptionsMonitor<AppConfig> appConfigOptionsMonitor
-        ) : base()
+        
+        )
     {
-
+        
         _timeProvider = timeProvider;
         _loggerService = loggerService;
         _appConfigOptions = appConfigOptionsMonitor;
@@ -37,18 +45,86 @@ public sealed class FluxManager : Notifications<string>
         _appConfigOptions.OnChange(optiuniNoi =>
         {
             InitializeUsbService();
-
         });
     }
 
     private void InitializeUsbService()
     {
         _usbService.InitializeUSBService(_appConfigOptions.CurrentValue.UsbServiceConfiguration);
-        _usbService.UsbDeviceInserted += _usbService_UsbDeviceInserted;
-        _usbService.UsbDeviceRemoved += _usbService_UsbDeviceRemoved;
+        _usbService.UsbDeviceInserted += _usbService_UsbDeviceInserted1;
+        _usbService.UsbDeviceRemoved += _usbService_UsbDeviceRemoved1;
         InitUsbService(_appConfigOptions.CurrentValue.WorkflowConfiguration.UsbWatcher);
     }
 
+    private void _usbService_UsbDeviceRemoved1(USBDeviceEvent obj)
+    {
+        OnUsbDriveRemoved(obj);
+        //Debug.WriteLine($"Removed {obj.ToString()}");
+        if (_fluxCurent is not null)
+        {
+            Debug.WriteLine("A sfost scos stickul de flux");
+
+            OnFluxDistrus();
+        }
+    }
+
+    private void OnFluxDistrus()
+    {
+        Debug.WriteLine("flow distrus" + Thread.CurrentThread.ManagedThreadId);
+        FlowDistrus?.Invoke();
+        _fluxCurent = null;
+    }
+
+    void _usbService_UsbDeviceInserted1(USBDeviceEvent obj)
+    {
+        OnUsbDriveInserted(obj);
+        //Debug.WriteLine($"Inserted {obj.ToString()}");
+        Debug.WriteLine("Inserted");
+        if (_fluxCurent is null)
+        {
+            CreateFlow(flowSettings: _appConfigOptions.CurrentValue.FlowListConfiguration.FirstOrDefault(), uSBDeviceEvent: obj);
+            
+        }
+        else
+        {
+            Debug.WriteLine("a fost inserat un usb dar exista deja un flux");
+        }
+    }
+
+    private void OnFlowCreated()
+    {
+        Debug.WriteLine("flow created" + Thread.CurrentThread.ManagedThreadId);
+        FlowCreated?.Invoke(_fluxCurent,StartFlux);
+    }
+
+    private void StartFlux()
+    {
+        _fluxCurent.StartFlux();
+    }
+
+    public void CreateFlow(FlowItemSettings flowSettings, USBDeviceEvent uSBDeviceEvent)
+    {
+        _fluxCurent = new()
+        {
+            FlowConfig = flowSettings,
+            EvenimentUSB = uSBDeviceEvent,
+        };
+        OnFlowCreated();
+    }
+
+
+
+    void OnUsbDriveInserted(USBDeviceEvent obj)
+    {
+        UsbDeviceInserted?.Invoke(obj);
+    }
+
+    void OnUsbDriveRemoved(USBDeviceEvent obj)
+    {
+        UsbDeviceRemoved?.Invoke(obj);
+    }
+
+    
 
     private void InitUsbService(bool usbWatcher)
     {
@@ -56,128 +132,62 @@ public sealed class FluxManager : Notifications<string>
         else { _usbService.StopUsbListener(); }
     }
 
-    private void _usbService_UsbDeviceRemoved(object? sender, UsbDeviceEventArgs e)
-    {
-        OnNotificare("RRRRRRRRRRRRRRRR");
-        Debug.WriteLine("REMOVED ");
-        UsbDeviceRemoved?.Invoke(this, e);
-
-    }
-
-    
-    public static event Action<bool, Action<bool>>? Eveniment;
-    public static event EventHandler<UsbDeviceEventArgs>? UsbDeviceRemoved;
-    public static event EventHandler<UsbDeviceEventArgs>? UsbDeviceInserted;
-    public static event EventHandler<LogMessageEventArgs<string>>? LogErrorString;
-    public static event Action<Flow>? FluxStarted;
-    public static event Action<ScanResult, Action<bool>>? FlowScanned;
-    public static event EventHandler<FlowClassifiedEventArgs>? FlowClassified;
-    public static event EventHandler<FlowContainerCreatedEventArgs>? FlowContainerCreated;
-
     
 
-    private async void _usbService_UsbDeviceInserted(object? sender, UsbDeviceEventArgs e)
-    {
-        OnNotificare("RRRRRRRRRRRRRRRR");
-        UsbDeviceInserted?.Invoke(this, e);
-        Eveniment?.Invoke(true, ProcesareRaspuns);
-        Debug.WriteLine("Inserted");
-        if (currentFlow is null)
-        {
-            currentFlow = new(
-                flowItemSettings: _appConfigOptions.CurrentValue.FlowListConfiguration.FirstOrDefault(),
-                initiator: e.UsbDevice);
-            OnFluxStarted(currentFlow);
+    //public event Action<Flow>? FluxStarted;
 
+    //public event Action<ScanResultModel, Action<bool>>? FlowScanned;
 
-        }
-        else
-        {
-            LogErrorString?.Invoke(this, new LogMessageEventArgs<string>("a fost inserat un usb dar exista deja un flux"));
-        }
-    }
+    //public event EventHandler<FlowClassifiedEventArgs>? FlowClassified;
 
-    protected override void OnNotificare(string mesaj)
-    {
-        base.OnNotificare(mesaj);
-    }
-    
-
-    private void ProcesareRaspuns(bool raspuns)
-    {
-        Debug.WriteLine(raspuns.ToString());
-    }
-
-
-
-    private async Task StartFlux()
-    {
-
-    }
+    //public event EventHandler<FlowContainerCreatedEventArgs>? FlowContainerCreated;
 
     public Workflow CurrentWorkflowSettings => _appConfigOptions.CurrentValue.WorkflowConfiguration;
 
-    private async Task OnFluxStarted(Flow flow)
-    {
-        FluxStarted?.Invoke(flow);
-        await ScanFlux();
-    }
+    //private async Task OnFluxStarted(Flow flow)
+    //{
+    //    FluxStarted?.Invoke(flow);
+    //    await ScanFlux();
+    //}
 
+    //private async Task FaContainere()
+    //{
+    //    for (int i = 0; i < 10; i++)
+    //    {
+    //        await Task.Delay(2000);
+    //        FlowContainerCreated?.Invoke(this, new FlowContainerCreatedEventArgs(i.ToString()));
+    //    }
+    //}
 
+    //private async Task ClasificaFlux()
+    //{
+    //    await Task.Delay(2000);
+    //    FlowClassified?.Invoke(this, new FlowClassifiedEventArgs(new RezultatClasificare(true)));
+    //}
 
-    private async Task FaContainere()
-    {
-        for (int i = 0; i < 10; i++)
-        {
+    //private async Task ScanFlux()
+    //{
+    //    await Task.Delay(2000);
+    //    var result = new ScanResultModel(Rezultat: true);
+    //    OnFluxScanned(result);
+    //}
 
-            await Task.Delay(2000);
-            FlowContainerCreated?.Invoke(this, new FlowContainerCreatedEventArgs(i.ToString()));
-        }
+    //private void OnFluxScanned(ScanResultModel result)
+    //{
+    //    if (CurrentWorkflowSettings.AVUserInput)
 
-
-    }
-
-    private async Task ClasificaFlux()
-    {
-        await Task.Delay(2000);
-        FlowClassified?.Invoke(this, new FlowClassifiedEventArgs(new RezultatClasificare(true)));
-
-    }
-
-    private async Task ScanFlux()
-    {
-        await Task.Delay(2000);
-        var result = new ScanResult(Rezultat: true);
-        OnFluxScanned(result);
-        
-    }
-
-    private void OnFluxScanned(ScanResult result)
-    {
-        if (CurrentWorkflowSettings.AVUserInput)
-
-            FlowScanned?.Invoke(result, async (inputUtilizator) =>
-            {
-                if (CurrentWorkflowSettings.AVUserInput)
-                    if (inputUtilizator)
-                    {
-                        await ClasificaFlux();
-                    }
-                    else
-                    {
-                        //utilizatorul nu e ok
-                    }
-                else await ClasificaFlux();
-            });
-    }
-}
-
-public class FlowEventArgs
-{
-    public Flow CurrentFlow { get; init; }
-
-    public FlowEventArgs(Flow currentFlow)
-    {
-        CurrentFlow = currentFlow;
-    }
+    //        FlowScanned?.Invoke(result, async (inputUtilizator) =>
+    //        {
+    //            if (CurrentWorkflowSettings.AVUserInput)
+    //                if (inputUtilizator)
+    //                {
+    //                    await ClasificaFlux();
+    //                }
+    //                else
+    //                {
+    //                    //utilizatorul nu e ok
+    //                }
+    //            else await ClasificaFlux();
+    //        });
+    //}
 }
