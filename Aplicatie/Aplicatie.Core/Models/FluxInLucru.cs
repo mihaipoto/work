@@ -4,29 +4,29 @@ using System.Diagnostics;
 
 namespace Aplicatie.Core.Models;
 
-public class Flow
+public class FluxInLucru
 {
    
 
     
 
-    public event Action<ScanResultModel> FlowScanned;
+    public event Action<ScanResultModel>? FlowScanned;
 
-    public event Action<Etapa2ResultModel, Action> Etapa2Result;
+    public event Action<Etapa2ResultModel, Action>? Etapa2Result;
 
     
 
     public Guid Id { get; init; }
 
-    public USBDeviceEvent EvenimentUSB { get; set; }
+    public USBDeviceEvent? EvenimentUSB { get; set; }
 
-    public FlowItemSettings FlowConfig { get; set; }
+    public FlowItemSettings? FlowConfig { get; set; }
 
-    public ScanResultModel RezultatScanare { get; set; }
+    public ScanResultModel? RezultatScanare { get; set; }
 
-    public Etapa2ResultModel RezultatEtapa2 { get; set; }
+    public Etapa2ResultModel? RezultatEtapa2 { get; set; }
 
-    public Flow()
+    public FluxInLucru()
     {
         Id = Guid.NewGuid();
         

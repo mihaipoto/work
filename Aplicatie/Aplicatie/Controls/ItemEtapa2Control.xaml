@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Aplicatie.Controls.ItemEtapa2Control"
              xmlns:controls="clr-namespace:Aplicatie.Controls"
-             xmlns:viewmodel="clr-namespace:Aplicatie.ViewModels"
-             x:DataType="viewmodel:ItemEtapa2VM">
+             xmlns:models="clr-namespace:Aplicatie.Core.Models;assembly=Aplicatie.Core"
+             x:DataType="models:ItemEtapa2Model">
     <VerticalStackLayout>
         <controls:LabelLabelControl Cheie="Nume:"
                                     Valoare="{Binding ItemNume}" />

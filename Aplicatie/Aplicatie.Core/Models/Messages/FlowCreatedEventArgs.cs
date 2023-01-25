@@ -7,10 +7,10 @@ public class FlowCreatedEventArgs : EventArgs
 {
 
 
-    public FlowCreatedEventArgs(Flow flow)
+    public FlowCreatedEventArgs(FluxInLucru flow)
     {
         Flow = flow;
     }
 
-    public Flow Flow { get; }
+    public FluxInLucru Flow { get; }
 }

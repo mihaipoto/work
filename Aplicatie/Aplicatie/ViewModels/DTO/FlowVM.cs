@@ -11,7 +11,7 @@ namespace Aplicatie.ViewModels;
 
 public partial class FlowVM : ObservableObject
 {
-    private readonly Flow _flow;
+    private readonly FluxInLucru _flow;
 
     [ObservableProperty]
     Guid _id;
@@ -26,7 +26,7 @@ public partial class FlowVM : ObservableObject
     ScanResultModel _rezultatScanare;
 
     [ObservableProperty]
-    Etapa2ResultVM _rezultatEtapa2;
+    Etapa2ResultModel _rezultatEtapa2;
 
 
     [ObservableProperty]
@@ -35,7 +35,7 @@ public partial class FlowVM : ObservableObject
     [ObservableProperty]
     bool _isEtapa2Expanded;
 
-    public FlowVM(Flow flow)
+    public FlowVM(FluxInLucru flow)
     {
         _flow = flow;
         Id = flow.Id;
@@ -53,13 +53,16 @@ public partial class FlowVM : ObservableObject
         MainThread.BeginInvokeOnMainThread(() =>
         {
             Debug.WriteLine("Etapa 2 in VM" + Thread.CurrentThread.ManagedThreadId);
-            RezultatEtapa2 = new(arg1);
+            RezultatEtapa2 = arg1;
             OnPropertyChanged(nameof(RezultatEtapa2));
             IsEtapa2 = true;
-            arg2?.Invoke();
+            //arg2?.Invoke();
+            _acceptareEtapa = arg2;
 
         });
     }
+
+    private Action _acceptareEtapa;
 
     internal void UnsubscribeEvents()
     {
@@ -85,6 +88,18 @@ public partial class FlowVM : ObservableObject
         OnPropertyChanged();
     }
 
+
+    [ObservableProperty]
+    bool _isEtapa2Accepted;
+
+
+    [RelayCommand]
+    public void AcceptEtapa2()
+    {
+        IsEtapa2Accepted = true;
+        _acceptareEtapa?.Invoke();
+
+    }
    
 
 }

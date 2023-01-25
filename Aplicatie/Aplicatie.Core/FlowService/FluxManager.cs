@@ -14,13 +14,13 @@ public sealed class FluxManager
     private readonly ILoggerService _loggerService;
     private readonly IOptionsMonitor<AppConfig> _appConfigOptions;
 
-    Flow _fluxCurent;
+    FluxInLucru _fluxCurent;
 
     
 
     public Workflow CurrentWorkflowConfiguration => _appConfigOptions.CurrentValue.WorkflowConfiguration;
 
-    public event Action<Flow, Action> FlowCreated;
+    public event Action<FluxInLucru, Action> FlowCreated;
     public event Action FlowDistrus;
     public event Action<USBDeviceEvent>? UsbDeviceRemoved;
     public event Action<USBDeviceEvent>? UsbDeviceInserted;

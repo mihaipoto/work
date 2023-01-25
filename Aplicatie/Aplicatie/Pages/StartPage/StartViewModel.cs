@@ -63,9 +63,9 @@ public partial class StartViewModel : ObservableObject
         _flowManagerService.FlowDistrus += _flowManagerService_FlowDistrus;
     }
 
-    private void _flowManagerService_FlowCreated1(Flow arg1, Action arg2)
+    private void _flowManagerService_FlowCreated1(FluxInLucru arg1, Action arg2)
     {
-        MainThread.BeginInvokeOnMainThread(async () =>
+        MainThread.BeginInvokeOnMainThread(() =>
         {
             Eveniment = "FlowCreated ";
             CurrentFlow = new(arg1);
@@ -98,7 +98,7 @@ public partial class StartViewModel : ObservableObject
 
     private void _flowManagerService_UsbDeviceRemoved(USBDeviceEvent obj)
     {
-        MainThread.BeginInvokeOnMainThread(async () =>
+        MainThread.BeginInvokeOnMainThread(() =>
         {
             Eveniment = "Removed : " + obj.ToString();
             Debug.WriteLine("USb removed start VM" + Thread.CurrentThread.ManagedThreadId);
@@ -110,7 +110,7 @@ public partial class StartViewModel : ObservableObject
 
     private void _flowManagerService_UsbDeviceInserted(USBDeviceEvent obj)
     {
-        MainThread.BeginInvokeOnMainThread(async () =>
+        MainThread.BeginInvokeOnMainThread(() =>
         {
             Eveniment = "Inserted : " + obj.ToString();
             Debug.WriteLine("usb inserted start VM" + Thread.CurrentThread.ManagedThreadId);
@@ -123,7 +123,7 @@ public partial class StartViewModel : ObservableObject
 
 
     [RelayCommand]
-    public async Task ToggleFluxExpand()
+    public void ToggleFluxExpand()
     {
         IsFluxExpanded = !IsFluxExpanded;
     }

@@ -8,10 +8,13 @@
              x:DataType="viewmodels:FlowVM">
 
     <VerticalStackLayout>
-        <controls:LabelLabelControl Cheie="ID:"
-                                    Valoare="{Binding Id}"
-                                    ExpandCommand="{Binding ExpandEtapa2Command}"/>
-
+        <HorizontalStackLayout>
+            <controls:LabelLabelControl Cheie="ID:"
+                                        Valoare="{Binding Id}"
+                                        ExpandCommand="{Binding ExpandEtapa2Command}" />
+            <controls:AcceptCancelControl AcceptCommand="{Binding AcceptEtapa2Command}" />
+        </HorizontalStackLayout>
+        
 
         <Border IsVisible="{Binding IsEtapa2Expanded}">
             <controls:Etapa2Control BindingContext="{Binding RezultatEtapa2}" />

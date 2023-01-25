@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Diagnostics;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -24,15 +25,20 @@ public static class ModelExtensions
     
     public static List<TItem> MapList<TItem>(this List<TItem> listaDestinatie, List<TItem> listaSursa)
     {
+       
         try
         {
+            if (listaDestinatie is null)
+                throw new ArgumentNullException(nameof(listaDestinatie));
+            if (listaSursa is null)
+                throw new ArgumentNullException(nameof(listaSursa));
             listaDestinatie.AddRange(listaSursa);
             return listaDestinatie;
         }
         catch (Exception ex)
         {
 
-            throw;
+            Debug.WriteLine(ex);
         }
         
 
@@ -52,7 +58,7 @@ public static class ModelExtensions
         json.Append(JsonSerializer.Serialize(
            new Dictionary<string, AppConfig>() { { nameof(AppConfig), (AppConfig)configuratie } }, CustomJsonSerializerOptions));
 
-        File.WriteAllText(configuratie.GeneralConfiguration.ConfigFilePath, json.ToString());
+        File.WriteAllText(configuratie?.GeneralConfiguration?.ConfigFilePath, json.ToString());
         json.Clear();
     }
 

@@ -4,6 +4,7 @@
 using Aplicatie.Core.Contracts;
 using Microsoft.Extensions.Configuration;
 using Serilog;
+using System.Diagnostics;
 
 namespace Aplicatie.Infrastructure.Services;
 
@@ -44,7 +45,7 @@ public class LoggerService : ILoggerService
         catch (Exception ex)
         {
 
-            throw;
+            Debug.WriteLine(ex);
         }
         
     }
@@ -58,7 +59,7 @@ public class LoggerService : ILoggerService
         catch (Exception ex)
         {
 
-            throw;
+            Debug.WriteLine(ex);
         }
         
     }

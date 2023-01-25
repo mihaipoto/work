@@ -15,9 +15,11 @@ public partial class ConfigurareViewModel : ObservableObject
 
     private readonly IDialogService _dialogService;
 
+    [ObservableProperty]
+    bool _isBusy = false;
 
     [ObservableProperty]
-    AppConfigVM appConfigObject;
+    AppConfigVM _appConfigObject;
 
     public AppTheme CurrentTheme => Application.Current.UserAppTheme;
 
@@ -31,12 +33,6 @@ public partial class ConfigurareViewModel : ObservableObject
     }
 
    
-
-    
-
-    [ObservableProperty]
-    bool isBusy = false;
-
     [RelayCommand]
     public void ToggleDarkLight()
     {
