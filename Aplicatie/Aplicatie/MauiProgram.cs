@@ -1,23 +1,24 @@
-﻿using Aplicatie.Infrastructure;
+﻿using Aplicatie.Controls;
+using Aplicatie.Core;
+using Aplicatie.Core.Models;
+using Aplicatie.Infrastructure;
 using Aplicatie.Platforms.Windows;
 using Aplicatie.Services;
-
 using Aplicatie.ViewModels;
-using CommunityToolkit.Maui;
-using Microsoft.Extensions.Logging;
-using Aplicatie.Core;
 using Aplicatie.Views;
+using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Markup;
-using Aplicatie.Controls;
-using Aplicatie.Repositories;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Aplicatie;
 
 public static class MauiProgram
 {
-	public static MauiApp CreateMauiApp()
-	{
-		var builder = MauiApp.CreateBuilder();
+    public static MauiApp CreateMauiApp()
+    {
+        var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
             .UseMauiCommunityToolkitMarkup()
@@ -27,68 +28,62 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             })
-        .AddUIServices();
-       
-
-
-
-
-
+        .AddUIServices()
+        .AddConfiguration()
+        .AddLogging();
 
         builder.Services.AddInfrastructureService(builder.Configuration);
-		builder.Services.AddCoreServices();
-		
+        builder.Services.AddCoreServices();
 
-		return builder.Build();
-	}
-
-    private static void MakeWindowZ(Microsoft.UI.Xaml.Window window)
-    {
-        
+        return builder.Build();
     }
 
-    public static MauiAppBuilder AddUIServices(this MauiAppBuilder builder)
-	{
-        builder.Logging.AddDebug();
 
-        
-        
-        //builder.Services.AddTransient<ConfigRepository>();
+
+    public static MauiAppBuilder AddUIServices(this MauiAppBuilder builder)
+    {
+        builder.Logging.AddDebug();
 
         builder.Services.AddSingleton<FolderPicker>();
         builder.Services.AddSingleton<IDialogService, DialogService>();
-		builder.Services.AddSingleton<INavigationService, NavigationService>();
-        
+        builder.Services.AddSingleton<INavigationService, NavigationService>();
+
         builder.Services.AddTransientWithShellRoute<ConfigurarePage, ConfigurareViewModel>("Config");
         builder.Services.AddTransientWithShellRoute<AddPage, AddViewModel>("Add");
         builder.Services.AddSingletonWithShellRoute<StartPage, StartViewModel>("StartPage");
         builder.Services.AddTransient<Dinamic>();
-        //mauiAppBuilder.Services.AddSingleton<IAppEnvironmentService, AppEnvironmentService>(
-        //   serviceProvider =>
-        //   {
-        //       var requestProvider = serviceProvider.GetService<IRequestProvider>();
-        //       var fixUriService = serviceProvider.GetService<IFixUriService>();
-        //       var settingsService = serviceProvider.GetService<ISettingsService>();
-
-        //       var aes =
-        //           new AppEnvironmentService(
-        //               new BasketMockService(), new BasketService(requestProvider, fixUriService),
-        //               new CampaignMockService(), new CampaignService(requestProvider, fixUriService),
-        //               new CatalogMockService(), new CatalogService(requestProvider, fixUriService),
-        //               new OrderMockService(), new OrderService(requestProvider),
-        //               new UserMockService(), new UserService(requestProvider));
-
-        //       aes.UpdateDependencies(settingsService.UseMocks);
-        //       return aes;
-        //   });
-
-
-        //builder.Services.AddTransient<TestPage>();
-        //builder.Services.AddTransient<TestPageViewModel>();
-        //builder.Services.AddScoped<IValidator<TestPageViewModel>, TestPageValidation>();
 
         return builder;
-	}
+    }
 
-    
+    public static MauiAppBuilder AddLogging(this MauiAppBuilder builder)
+    {
+        builder.Logging.ClearProviders();
+        var logger = new LoggerConfiguration()
+        .ReadFrom.Configuration(builder.Configuration)
+        .WriteTo.SQLite("E:\\work\\Aplicatie\\stuff\\Loguri\\loguri.sqlite")
+        .WriteTo.Seq("http://localhost:5341", apiKey: "QyA3cJkBvgSOgy3jExec")
+        .WriteTo.Debug()
+        .Enrich.WithProperty("Username", Environment.UserName)
+        .CreateLogger();
+
+        builder.Logging.AddSerilog(logger);
+
+
+
+        return builder;
+    }
+
+
+    public static MauiAppBuilder AddConfiguration(this MauiAppBuilder builder)
+    {
+        builder.Configuration.Sources.Clear();
+        builder.Configuration.AddJsonFile("""E:\work\Aplicatie\stuff\ConfigFiles\AppConfig.json""", optional: false, reloadOnChange: true);
+        //builder.Configuration.AddJsonFile("""E:\work\Aplicatie\stuff\ConfigFiles\LoggerServiceConfig.json""", optional: false, reloadOnChange: true);
+
+        builder.Services.AddOptions<AppConfig>().Bind(builder.Configuration.GetSection(nameof(AppConfig)));
+
+        return builder;
+    }
+
 }

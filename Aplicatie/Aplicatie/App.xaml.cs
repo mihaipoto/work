@@ -1,20 +1,31 @@
 ﻿using Aplicatie.Core;
+using Aplicatie.Core.Models;
 using Aplicatie.Core.Services;
 using Aplicatie.Services;
+using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Options;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace Aplicatie;
+
 
 public partial class App : Application
 {
 
+
+    public IServiceProvider serviceProviderr;
+
     public App(FluxManager fm,
-        INavigationService navigationService)
+        INavigationService navigationService, IServiceProvider serviceProvider
+        )
     {
         try
         {
-            InitializeComponent();
 
+            serviceProviderr = serviceProvider;
+            InitializeComponent();
             MainPage = new AppShell(navigationService);
         }
         catch (Exception ex)
@@ -22,7 +33,13 @@ public partial class App : Application
 
             Debug.WriteLine(ex);
         }
-        
+       
+    }
+
+    protected override void OnStart()
+    {
+
+        base.OnStart();
     }
 
     protected override Window CreateWindow(IActivationState activationState)

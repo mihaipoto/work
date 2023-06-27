@@ -1,8 +1,4 @@
-﻿
-
-
-using Aplicatie.Core.Contracts;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Logging;
 using Serilog;
 using System.Diagnostics;
 
@@ -10,14 +6,18 @@ namespace Aplicatie.Infrastructure.Services;
 
 public class LoggerService : ILoggerService
 {
+    private readonly ILoggerFactory _loggerFactory;
 
     //ILogger _loggerGeneral;
 
-    public LoggerService(IConfiguration configuration)
+    public LoggerService(ILoggerFactory loggerFactory)
     {
-        Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration)
-                .CreateLogger();
+        //Log.Logger = new LoggerConfiguration()
+        //        .ReadFrom.Configuration(configuration)
+        //        .WriteTo.Console()
+        //        .CreateLogger();
+        _loggerFactory = loggerFactory;
+
     }
 
     //public void InitLoggerService(IConfiguration loggerConfiguration)
@@ -47,7 +47,7 @@ public class LoggerService : ILoggerService
 
             Debug.WriteLine(ex);
         }
-        
+
     }
 
     public void Logheaza_INFO(string mesaj)
@@ -61,7 +61,7 @@ public class LoggerService : ILoggerService
 
             Debug.WriteLine(ex);
         }
-        
+
     }
 
 }

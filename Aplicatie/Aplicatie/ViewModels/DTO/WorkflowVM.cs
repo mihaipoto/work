@@ -1,10 +1,6 @@
-﻿using Aplicatie.Core.Models.Configuratie;
+﻿using Aplicatie.Core.Models;
+
 using CommunityToolkit.Mvvm.ComponentModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Aplicatie.ViewModels;
 
@@ -16,17 +12,14 @@ public partial class WorkflowVM : ObservableObject
     [ObservableProperty]
     public bool _aVUserInput;
 
-
     [ObservableProperty]
     public bool _classificationUserInput;
-
 
     [ObservableProperty]
     public bool _containerUserInput;
 
     public WorkflowVM()
     {
-
     }
 
     public Workflow ToModel()
@@ -35,7 +28,7 @@ public partial class WorkflowVM : ObservableObject
         model.AVUserInput = AVUserInput;
         model.ContainerUserInput = ContainerUserInput;
         model.ClassificationUserInput = ClassificationUserInput;
-        model.UsbWatcher= UsbWatcher;
+        model.UsbWatcher = UsbWatcher;
         return model;
     }
 
@@ -50,5 +43,4 @@ public partial class WorkflowVM : ObservableObject
 
 public static class MyClass
 {
-
 }

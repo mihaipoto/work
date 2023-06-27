@@ -74,6 +74,24 @@
     "UsbServiceConfiguration": {
       "WqlEventQuery": "SELECT * FROM Win32_VolumeChangeEvent WHERE EventType = 2 or EventType = 3",
       "ManagementObjectSearcher": "SELECT * FROM Win32_DiskDrive"
+    },
+    "TemaCurenta": {
+      "BackgroundButon": "#ff00a2"
     }
+  },
+  "Serilog": {
+    "MinimumLevel": "Information",
+    "WriteTo": [
+      {
+        "Name": "SQLite",
+        "Args": {
+          "connectionString": "Data Source=E:\\work\\Aplicatie\\stuff\\Loguri\\loguri.sqlite",
+          "tableName": "Log",
+          "batchSize": 1,
+          "autoCreateSqlTable": true
+        }
+      }
+    ]
+
   }
 }

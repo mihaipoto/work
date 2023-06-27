@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:sfgrid="clr-namespace:Syncfusion.Maui.DataGrid;assembly=Syncfusion.Maui.DataGrid"
+             xmlns:viewmodels="clr-namespace:MauiApp1.ViewModels"
+             xmlns:models="clr-namespace:MauiApp1.Models"
+             xmlns:dq="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
+             x:Class="MauiApp1.MainPage"
+             x:DataType="viewmodels:MainViewModel">
+
+
+    <Grid RowDefinitions="auto, *"
+          ColumnDefinitions="auto, auto, auto, auto, auto, *">
+
+
+
+        <Button x:Name="CounterBtn"
+                Text="{Binding CountButtonText}"
+                SemanticProperties.Hint="Counts the number of times you click"
+                Command="{Binding IncrementCounterCommand}"
+                HorizontalOptions="Start" />
+
+
+        <Button Text="Get last 10 logs"
+                Grid.Column="1"
+                HorizontalOptions="Start"
+                Command="{Binding GetLogsCommand}">
+
+        </Button>
+        <Button Text="Next 10"
+                Grid.Column="2"
+                HorizontalOptions="Start"
+                Command="{Binding GetBackLogsCommand}">
+
+        </Button>
+        <Border Grid.Column="3"
+                HorizontalOptions="Start">
+            <Label Text="{Binding LastId}" />
+        </Border>
+        <Border Grid.Column="4"
+                HorizontalOptions="Start">
+            <Label Text="{Binding CurrentId}" />
+        </Border>
+        <Border Grid.Column="5"
+                HorizontalOptions="Start">
+            <Label Text="{Binding CurrentPage}" />
+        </Border>
+
+        <sfgrid:SfDataGrid Grid.Row="1"
+                           Grid.ColumnSpan="6"
+                           ItemsSource="{Binding Logs}"
+                           BackgroundColor="White"
+                           ColumnWidthMode="Fill"
+                           AutoGeneratingColumn="SfDataGrid_AutoGeneratingColumn">
+
+        </sfgrid:SfDataGrid>
+
+
+        <!--<dq:DataGrid Grid.Row="1"
+                     Grid.ColumnSpan="6"
+                     ItemsSource="{Binding Logs}"
+                     SelectionEnabled="True"
+                     RowHeight="50"
+                     HeaderHeight="50"
+                     IsRefreshing="{Binding IsRefreshing}">
+            <dq:DataGrid.NoDataView>
+                <Label Text="NIMIC"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+            </dq:DataGrid.NoDataView>
+            <dq:DataGrid.Columns>
+                <dq:DataGridColumn Title="ID"
+                                   PropertyName="Id" />
+                <dq:DataGridColumn Title="Timestamp"
+                                   PropertyName="Timestamp"
+                                   SortingEnabled="True" />
+                <dq:DataGridColumn Title="Level"
+                                   PropertyName="Level"
+                                   SortingEnabled="True" />
+                <dq:DataGridColumn Title="Exception"
+                                   PropertyName="Exception" />
+                <dq:DataGridColumn Title="RenderedMessage"
+                                   PropertyName="RenderedMessage" />
+                <dq:DataGridColumn Title="Properties"
+                                   PropertyName="Properties" />
+            </dq:DataGrid.Columns>
+            <dq:DataGrid.RowsBackgroundColorPalette>
+                <dq:PaletteCollection>
+                    <Color>#F2F2F2</Color>
+                    <Color>#FFFFFF</Color>
+                </dq:PaletteCollection>
+            </dq:DataGrid.RowsBackgroundColorPalette>
+
+        </dq:DataGrid>-->
+
+
+
+        <!--<ScrollView>
+                <CollectionView ItemsSource="{Binding Logs}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:LogEntry">
+                            <Border>
+                                <HorizontalStackLayout>
+                                    <Label Text="{Binding Id}" />
+                                    <Label Text="{Binding Timestamp}" />
+                                    <Label Text="{Binding Level}" />
+                                    <Label Text="{Binding Exception}" />
+                                    <Label Text="{Binding RenderedMessage}" />
+                                    <Label Text="{Binding Properties}" />
+                                </HorizontalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </ScrollView>-->
+
+
+    </Grid>
+
+
+</ContentPage>

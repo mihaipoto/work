@@ -1,44 +1,41 @@
 ﻿using Aplicatie.Core.Contracts;
 using Aplicatie.Core.Models;
-using Aplicatie.Core.Models.Configuratie;
+using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Diagnostics;
 
 namespace Aplicatie.Core.Services;
 
-public sealed class FluxManager
+public partial class FluxManager : ObservableObject
 
 {
     private readonly IUsbService _usbService;
     private readonly IDateTimeProvider _timeProvider;
-    private readonly ILoggerService _loggerService;
+    private readonly ILogger _logger;
     private readonly IOptionsMonitor<AppConfig> _appConfigOptions;
+    private readonly IServiceProvider _serviceProvider;
 
-    FluxInLucru _fluxCurent;
+    [ObservableProperty]
+    private FluxInLucru _fluxCurent;
 
-    
-
-    public Workflow CurrentWorkflowConfiguration => _appConfigOptions.CurrentValue.WorkflowConfiguration;
-
-    public event Action<FluxInLucru, Action> FlowCreated;
-    public event Action FlowDistrus;
-    public event Action<USBDeviceEvent>? UsbDeviceRemoved;
-    public event Action<USBDeviceEvent>? UsbDeviceInserted;
-   
-
+    //public event Action<FluxInLucru, Action> FlowCreated;
+    //public event Action FlowDistrus;
+    //public event Action<USBDeviceEvent>? UsbDeviceRemoved;
+    //public event Action<USBDeviceEvent>? UsbDeviceInserted;
 
     public FluxManager(
         IUsbService usbService,
         IDateTimeProvider timeProvider,
-        ILoggerService loggerService,
-        IOptionsMonitor<AppConfig> appConfigOptionsMonitor
-        
+        ILogger<FluxManager> logger,
+        IOptionsMonitor<AppConfig> appConfigOptionsMonitor,
+        IServiceProvider serviceProvider
+
         )
     {
-        
         _timeProvider = timeProvider;
-        _loggerService = loggerService;
+        _logger = logger;
         _appConfigOptions = appConfigOptionsMonitor;
+        _serviceProvider = serviceProvider;
         _usbService = usbService;
         InitializeUsbService();
 
@@ -58,81 +55,74 @@ public sealed class FluxManager
 
     private void _usbService_UsbDeviceRemoved1(USBDeviceEvent obj)
     {
-        OnUsbDriveRemoved(obj);
+        //UsbDeviceRemoved?.Invoke(obj);
+
         //Debug.WriteLine($"Removed {obj.ToString()}");
         if (_fluxCurent is not null)
         {
-            Debug.WriteLine("A sfost scos stickul de flux");
+            _logger.LogWarning("A fost scos stickul de flux.");
 
             OnFluxDistrus();
         }
     }
 
+    //private void DisposeScopes()
+    //{
+    //    if (usbInsertedScope is not null)
+    //    {
+    //        usbInsertedScope.Dispose();
+    //    }
+    //    if (fluxCreatedScope is not null)
+    //    {
+    //        fluxCreatedScope.Dispose();
+    //    }
+    //}
+
     private void OnFluxDistrus()
     {
-        Debug.WriteLine("flow distrus" + Thread.CurrentThread.ManagedThreadId);
-        FlowDistrus?.Invoke();
-        _fluxCurent = null;
+        //FlowDistrus?.Invoke();
+        FluxCurent.Dispose();
+        FluxCurent = null;
     }
 
-    void _usbService_UsbDeviceInserted1(USBDeviceEvent obj)
+    private void _usbService_UsbDeviceInserted1(USBDeviceEvent obj)
     {
-        OnUsbDriveInserted(obj);
-        //Debug.WriteLine($"Inserted {obj.ToString()}");
-        Debug.WriteLine("Inserted");
-        if (_fluxCurent is null)
+        //UsbDeviceInserted?.Invoke(obj);
+
+        if (FluxCurent is null)
         {
             CreateFlow(flowSettings: _appConfigOptions.CurrentValue.FlowListConfiguration.FirstOrDefault(), uSBDeviceEvent: obj);
-            
+            Task.Run(StartFlux);
         }
         else
         {
-            Debug.WriteLine("a fost inserat un usb dar exista deja un flux");
+            _logger.LogWarning("A fost inserat un usb dar exista deja un flux");
         }
-    }
-
-    private void OnFlowCreated()
-    {
-        Debug.WriteLine("flow created" + Thread.CurrentThread.ManagedThreadId);
-        FlowCreated?.Invoke(_fluxCurent,StartFlux);
     }
 
     private void StartFlux()
     {
-        _fluxCurent.StartFlux();
+        FluxCurent.StartFlux();
+        _logger.LogInformation("Flow started");
     }
 
     public void CreateFlow(FlowItemSettings flowSettings, USBDeviceEvent uSBDeviceEvent)
     {
-        _fluxCurent = new()
+        FluxCurent = new(_serviceProvider)
         {
             FlowConfig = flowSettings,
             EvenimentUSB = uSBDeviceEvent,
         };
-        OnFlowCreated();
+
+        _logger.LogInformation("Flow created");
+        //FlowCreated?.Invoke(_fluxCurent, StartFlux);
     }
-
-
-
-    void OnUsbDriveInserted(USBDeviceEvent obj)
-    {
-        UsbDeviceInserted?.Invoke(obj);
-    }
-
-    void OnUsbDriveRemoved(USBDeviceEvent obj)
-    {
-        UsbDeviceRemoved?.Invoke(obj);
-    }
-
-    
 
     private void InitUsbService(bool usbWatcher)
     {
         if (usbWatcher) { _usbService.StartUsbListener(); }
         else { _usbService.StopUsbListener(); }
     }
-
-    
 
     //public event Action<Flow>? FluxStarted;
 
@@ -141,8 +131,6 @@ public sealed class FluxManager
     //public event EventHandler<FlowClassifiedEventArgs>? FlowClassified;
 
     //public event EventHandler<FlowContainerCreatedEventArgs>? FlowContainerCreated;
-
-    public Workflow CurrentWorkflowSettings => _appConfigOptions.CurrentValue.WorkflowConfiguration;
 
     //private async Task OnFluxStarted(Flow flow)
     //{

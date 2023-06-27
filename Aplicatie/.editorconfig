@@ -1,0 +1,4 @@
+﻿[*.{cs,vb}]
+
+# IDE2000: Avoid multiple blank lines
+dotnet_diagnostic.IDE2000.severity = none
