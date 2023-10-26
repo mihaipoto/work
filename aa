@@ -1,0 +1,87 @@
+Sure! Here's an example of a C# function that moves a directory to another path using asynchronous operations:
+
+csharp
+using System;
+using System.IO;
+using System.Threading.Tasks;
+
+public static class DirectoryHelper
+{
+    public static async Task MoveDirectoryAsync(string sourceDir, string destinationDir)
+    {
+        // Check if the source directory exists
+        if (!Directory.Exists(sourceDir))
+        {
+            throw new DirectoryNotFoundException($"Source directory not found: {sourceDir}");
+        }
+
+        // Create the destination directory if it doesn't exist
+        if (!Directory.Exists(destinationDir))
+        {
+            Directory.CreateDirectory(destinationDir);
+        }
+
+        // Move files within the directory
+        await MoveFilesAsync(sourceDir, destinationDir);
+
+        // Move subdirectories within the directory recursively
+        string[] subDirectories = Directory.GetDirectories(sourceDir);
+        foreach (string subDirectory in subDirectories)
+        {
+            string subDirectoryName = Path.GetFileName(subDirectory);
+            string destinationSubDirectory = Path.Combine(destinationDir, subDirectoryName);
+
+            await MoveDirectoryAsync(subDirectory, destinationSubDirectory);
+        }
+
+        // Delete the source directory
+        Directory.Delete(sourceDir);
+    }
+
+    private static async Task MoveFilesAsync(string sourceDir, string destinationDir)
+    {
+        string[] files = Directory.GetFiles(sourceDir);
+
+        foreach (string file in files)
+        {
+            string fileName = Path.GetFileName(file);
+            string destinationFile = Path.Combine(destinationDir, fileName);
+
+            await MoveFileAsync(file, destinationFile);
+        }
+    }
+
+    private static async Task MoveFileAsync(string sourceFile, string destinationFile)
+    {
+        using (FileStream sourceStream = new FileStream(sourceFile, FileMode.Open))
+        using (FileStream destinationStream = new FileStream(destinationFile, FileMode.CreateNew))
+        {
+            await sourceStream.CopyToAsync(destinationStream);
+        }
+
+        File.Delete(sourceFile);
+    }
+}
+
+
+To use this `MoveDirectoryAsync` function, you can call it in an async method like this:
+
+csharp
+public async Task Main()
+{
+    string sourceDirectory = "C:/SourceDirectory";
+    string destinationDirectory = "C:/DestinationDirectory";
+
+    try
+    {
+        await DirectoryHelper.MoveDirectoryAsync(sourceDirectory, destinationDirectory);
+        Console.WriteLine("Directory moved successfully.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Failed to move directory: {ex.Message}");
+    }
+}
+
+
+Make sure to replace `'C:/SourceDirectory'` and `'C:/DestinationDirectory'` with the actual paths of the source and destination directories you want to move.
